@@ -1,3 +1,4 @@
+/* eslint-disable max-len */
 // Class to facilitate drawing cards to the canvas
 class CardDrawer {
   // Constructor defaults to -1's if nothing is passed
@@ -6,6 +7,12 @@ class CardDrawer {
     this.cardWidth = cardWidth || -1;
     this.canvasWidth = canvas ? canvas.width : -1;
     this.canvasHeight = canvas ? canvas.height : -1;
+
+    // Top-left trackers for cards
+    this.cardLeft = -1;
+    this.cardTop = -1;
+    this.cardRight = -1;
+    this.cardBottom = -1;
   }
 
   // Setter for card sizes
@@ -33,15 +40,56 @@ class CardDrawer {
     }
 
     // Calc and draw the card base
-    const x = (this.canvasWidth / 2) - ((this.cardWidth / 2) * this.scalar);
-    const y = (this.canvasHeight / 2) - ((this.cardHeight / 2) * this.scalar);
+    this.cardLeft = (this.canvasWidth / 2) - ((this.cardWidth / 2) * this.scalar);
+    this.cardTop = (this.canvasHeight / 2) - ((this.cardHeight / 2) * this.scalar);
+    this.cardRight = (this.canvasWidth / 2) + ((this.cardWidth / 2) * this.scalar);
+    this.cardBottom = (this.canvasHeight / 2) + ((this.cardHeight / 2) * this.scalar);
+
     ctx.fillStyle = 'white';
     ctx.fillRect(
-      x,
-      y,
+      this.cardLeft,
+      this.cardTop,
       this.cardWidth * this.scalar,
       this.cardHeight * this.scalar,
     );
+  }
+
+  // Demo component for testing
+  // const demoCardComponent = {
+  //   text: 'Card Title',
+  //   textAlign: 'centered'
+  //   fillStyle: 'black',
+  //   font: '36px serif',
+  //   position: {
+  //     top: 32,
+  //     left: centered,
+  //   },
+  // };
+
+  drawCardComponents(ctx, cards) {
+    console.log('Drawing Card Components...');
+    const amt = cards.length;
+
+    ctx.font = '50px serif';
+    ctx.fillStyle = 'tomato';
+    ctx.textAlign = 'center';
+    ctx.fillText('Test Text', this.canvasWidth / 2, this.canvasHeight / 2);
+
+    for (let i = 0; i < amt; i++) {
+      ctx.fillStyle = cards[i].fillStyle || 'black';
+      ctx.font = cards[i].font || '20px serif';
+      ctx.textAlign = cards[i].textAlign || 'center';
+
+      const xPos = (cards[i].position.left === 'center')
+        ? this.canvasWidth / 2
+        : ((cards[i].position.left * 0.01) * (this.cardWidth * this.scalar)) + this.cardLeft;
+
+      const yPos = (cards[i].position.top === 'center')
+        ? this.canvasHeight / 2
+        : ((cards[i].position.top * 0.01) * (this.cardHeight * this.scalar)) + this.cardTop;
+
+      ctx.fillText(cards[i].text, xPos, yPos);
+    }
   }
 }
 

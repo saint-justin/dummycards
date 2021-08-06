@@ -6,6 +6,28 @@ const Canvas = (props) => {
   const canvasRef = useRef(null);
   const cardDrawer = new CardDrawer();
 
+  const demoCardComponent1 = {
+    text: 'Card Title',
+    textAlign: 'center',
+    fillStyle: '#000000',
+    font: '36px serif',
+    position: {
+      top: 10,
+      left: 'center',
+    },
+  };
+
+  const demoCardComponent2 = {
+    text: '100hp',
+    textAlign: 'left',
+    fillStyle: '#000000',
+    font: '36px serif',
+    position: {
+      top: 10,
+      left: 5,
+    },
+  };
+
   // Actually draws onto the canvas
   const draw = (ctx) => {
     // Calculate canvas width and height
@@ -16,18 +38,20 @@ const Canvas = (props) => {
     cardDrawer.updateCanvasSize(canvas);
 
     // Clear canvas
-    ctx.fillStyle = 'black';
+    ctx.fillStyle = '#262626';
     ctx.fillRect(0, 0, canvas.width, canvas.height);
 
     // Draws main card components
     cardDrawer.drawCardBase(ctx);
+    cardDrawer.drawCardComponents(ctx, [demoCardComponent1, demoCardComponent2]);
 
     // Debug outputs for sizing
-    ctx.fillStyle = 'white';
+    ctx.fillStyle = 'tomato';
     ctx.font = '12px serif';
     ctx.textAlign = 'left';
-    ctx.fillText(`Canvas Width: ${cardDrawer.canvasWidth}   Canvas Height: ${cardDrawer.canvasHeight}`, 8, 8);
-    ctx.fillText(`Card Width: ${cardDrawer.cardWidth}   Card Height: ${cardDrawer.cardHeight}`, 8, 28);
+    ctx.fillText(`Canvas Width: ${cardDrawer.canvasWidth}   Canvas Height: ${cardDrawer.canvasHeight}`, 8, 16);
+    ctx.fillText(`Card Width: ${cardDrawer.cardWidth}   Card Height: ${cardDrawer.cardHeight}`, 8, 32);
+    console.log(ctx);
   };
 
   // Set up the canvas w/ info needed for drawing
