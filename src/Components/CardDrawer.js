@@ -42,8 +42,6 @@ class CardDrawer {
       this.cardWidth * this.scalar,
       this.cardHeight * this.scalar,
     );
-    console.log(`Drawing to (${x}, ${y})`);
-    console.log(`Width/Height: ${this.cardWidth} & ${this.cardHeight} scaled by ~${this.scalar.toFixed(4)}`);
   }
 }
 
