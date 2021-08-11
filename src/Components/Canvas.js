@@ -43,7 +43,7 @@ const Canvas = (props) => {
 
     // Draws main card components
     cardDrawer.drawCardBase(ctx);
-    cardDrawer.drawCardComponents(ctx, [demoCardComponent1, demoCardComponent2]);
+    cardDrawer.drawCardComponents(ctx, props.drawnComponents);
 
     // Debug outputs for sizing
     ctx.fillStyle = 'tomato';

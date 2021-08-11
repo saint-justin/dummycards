@@ -4,14 +4,12 @@ import './Entry.scss';
 
 // Simple wrapper component for lazy label/input making
 export default (props) => {
-  const [val, setVal] = useState(props.placeholder);
+  const [val, setVal] = useState(props.value);
 
-  const cleanName = (str) => str.replaceAll(' ', '_').toLowerCase();
+  const cleanName = (str) => `entry_ ${str.replaceAll(' ', '_').toLowerCase()}`;
   const updateVal = (e) => {
-    console.log(`CHANGED VALUE FOR ${cleanName(props.name)}: ${e.target.value}`);
-    const newValue = parseInt(e.target.value, 10);
-    setVal(newValue);
-    props.update(newValue);
+    setVal(e.target.value);
+    props.update(e.target.value);
   };
 
   return (

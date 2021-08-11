@@ -16,10 +16,16 @@ html, body, #root {
   padding: 8px;
   display: flex;
   flex-direction: column;
+  overflow-y: auto;
+  overflow-x: none;
 }
 
 #right {
   flex-grow: 1;
   // padding: 8px;
   background-color: #FFF;
+}
+
+::-webkit-input-placeholder, ::-moz-placeholder, :-ms-input-placeholder, :-moz-placeholder { 
+  color: orangered;
 }
