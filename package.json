@@ -1,12 +1,12 @@
 {
-  "name": "fastcards",
+  "name": "DummyCards",
   "version": "0.1.0",
   "description": "",
   "scripts": {
-    "pretest": "eslint ./src/**/*.js --fix",
-    "test": "echo \"Tests Complete\"",
     "start": "parcel index.html",
-    "build": "parcel build index.html"
+    "build": "parcel build index.html",
+    "typecheck": "tsc --noEmit",
+    "typewatch": "tsc --noEmit --watch"
   },
   "license": "MIT",
   "dependencies": {
@@ -14,19 +14,17 @@
     "react-dom": "^16.13.1"
   },
   "devDependencies": {
-    "@parcel/transformer-sass": "^2.0.0-rc.0",
+    "@babel/preset-typescript": "^7.10.4",
+    "@types/react": "^16.9.34",
+    "@types/react-dom": "^16.9.7",
     "babel-preset-nano-react-app": "^0.1.0",
-    "eslint": "^7.32.0",
-    "eslint-config-airbnb": "^18.2.1",
-    "eslint-plugin-import": "^2.23.4",
-    "eslint-plugin-react": "^7.24.0",
     "parcel": "^2.0.0-alpha.3.2",
-    "sass": "^1.37.5",
-    "svg-url-loader": "^7.1.1"
+    "typescript": "^3.8.3"
   },
   "babel": {
     "presets": [
-      "nano-react-app"
+      "@babel/preset-typescript",
+      "babel-preset-nano-react-app"
     ]
   }
 }

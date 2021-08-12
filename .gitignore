@@ -2,3 +2,4 @@ node_modules
 dist
 .cache
 .parcel-cache
+JS_VERSION_OLD
