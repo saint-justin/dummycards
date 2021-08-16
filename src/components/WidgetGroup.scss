@@ -1,4 +1,6 @@
-.entry-group {
+$default-shadow: 0 0 5px -1px rgba(0,0,0,0.2);
+
+.widget-group {
   display: flex;
   flex-direction: column;
   padding: 12px;

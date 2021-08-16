@@ -6,7 +6,7 @@ import './App.scss';
 
 export default () => {
 
-  const [widgets, setWidgets] = useState<React.ReactElement | undefined>(undefined);
+  const [widgets, setWidgets] = useState<JSX.Element[] | undefined>(undefined);
   /*
     name: string,
     placeholder: string,
@@ -18,7 +18,7 @@ export default () => {
     widgetInputs.push(<WidgetInput name='test 1' placeholder='placeholder 1' key='key1'></WidgetInput>);
     widgetInputs.push(<WidgetInput name='test 2' placeholder='placeholder 2' key='key2'></WidgetInput>);
     widgetInputs.push(<WidgetInput name='test 3' placeholder='placeholder 3' key='key3'></WidgetInput>);
-    setWidgets(<div className='widget-set'>{widgetInputs}</div>);
+    setWidgets(widgetInputs);
   }, [])
 
   return (
