@@ -3,7 +3,7 @@ import './WidgetGroup.scss'
 
 type WidgetGroup = {
   name: string,
-  widgetInputSet: React.ReactElement | undefined,
+  widgetInputSet: JSX.Element[] | undefined,
   // action?: (e: Event) // Revisit!
 }
 
