@@ -1,29 +1,24 @@
-type Card = {
-  height: number | undefined,
-  width: number | undefined,
-  sides: {
-    left: number | undefined,
-    right: number | undefined,
-    top: number | undefined,
-    bottom: number | undefined,
-  }
-}
+import { Drawable, Card } from '../types'
 
 // Class to facilitate drawing cards to the canvas
 class CardDrawer {
   scalar: number;
-  canvasWidth: number | undefined;
-  canvasHeight: number | undefined;
+  canvas: {
+    width: number | undefined,
+    height: number | undefined,
+  }
   card: Card;
 
   // Populate w/ undefined
   constructor() {
     this.scalar = 1;
-    this.canvasWidth =  undefined;
-    this.canvasHeight =  undefined;
-    this.card = {
-      height: undefined,
+    this.canvas = {
       width: undefined,
+      height: undefined,
+    };
+    this.card = {
+      height: 1125,
+      width: 825,
       sides: {
         left: undefined,
         right: undefined,
@@ -31,6 +26,10 @@ class CardDrawer {
         bottom: undefined,
       }
     }
+  }
+
+  getCardInfo(): Card {
+    return this.card;
   }
 
   // Setter for card sizes
@@ -46,14 +45,14 @@ class CardDrawer {
       return;
     }
 
-    this.canvasWidth = canvas.width;
-    this.canvasHeight = canvas.height;
+    this.canvas.width = canvas.width;
+    this.canvas.height = canvas.height;
   }
 
   // Fxn to draw the basic card to the canvas
   drawCardBase(ctx: CanvasRenderingContext2D): void {
     // Check all values used exist
-    if (!this.card.height || !this.card.width || !this.canvasHeight || !this.canvasWidth) {
+    if (!this.card.height || !this.card.width || !this.canvas.height || !this.canvas.width) {
       console.error("ERROR: Tried to draw card base with missing values");
       return;
     }
@@ -61,18 +60,18 @@ class CardDrawer {
     // Get a scalar to fit the card in frame
     this.scalar = 1;
     const padding = 8;
-    if (this.card.height > this.canvasHeight - (padding * 2)) {
-      this.scalar = (this.canvasHeight - (padding * 2)) / this.card.height;
+    if (this.card.height > this.canvas.height - (padding * 2)) {
+      this.scalar = (this.canvas.height - (padding * 2)) / this.card.height;
     }
-    if (this.card.width * this.scalar > this.canvasWidth - (padding * 2)) {
-      this.scalar = (this.canvasWidth - (padding * 2)) / this.card.width;
+    if (this.card.width * this.scalar > this.canvas.width - (padding * 2)) {
+      this.scalar = (this.canvas.width - (padding * 2)) / this.card.width;
     }
 
     // Calc and draw the card base
-    this.card.sides.left = (this.canvasWidth / 2) - ((this.card.width / 2) * this.scalar);
-    this.card.sides.top = (this.canvasHeight / 2) - ((this.card.height / 2) * this.scalar);
-    this.card.sides.right = (this.canvasWidth / 2) + ((this.card.width / 2) * this.scalar);
-    this.card.sides.bottom = (this.canvasHeight / 2) + ((this.card.height / 2) * this.scalar);
+    this.card.sides.left = (this.canvas.width / 2) - ((this.card.width / 2) * this.scalar);
+    this.card.sides.top = (this.canvas.height / 2) - ((this.card.height / 2) * this.scalar);
+    this.card.sides.right = (this.canvas.width / 2) + ((this.card.width / 2) * this.scalar);
+    this.card.sides.bottom = (this.canvas.height / 2) + ((this.card.height / 2) * this.scalar);
 
     ctx.fillStyle = 'white';
     ctx.fillRect(
@@ -103,8 +102,8 @@ class CardDrawer {
       || !this.card.sides.right 
       || !this.card.sides.top 
       || !this.card.sides.bottom 
-      || !this.canvasHeight 
-      || !this.canvasWidth) {
+      || !this.canvas.height 
+      || !this.canvas.width) {
         console.error('ERROR: Tried to draw card components with invalid measures');
         return;
     }
@@ -115,27 +114,44 @@ class CardDrawer {
     ctx.font = '50px serif';
     ctx.fillStyle = 'tomato';
     ctx.textAlign = 'center';
-    ctx.fillText('Test Text', this.canvasWidth / 2, this.canvasHeight / 2);
+    ctx.fillText('Test Text', this.canvas.width / 2, this.canvas.height / 2);
 
+    // Draw out all chunks of text onto the
     for (let i = 0; i < amt; i++) {
       ctx.fillStyle = cards[i].fillStyle || 'black';
       ctx.font = cards[i].font || '20px serif';
       ctx.textAlign = cards[i].textAlign || 'center';
 
-      const xPos = (cards[i].position.left === 'center')
-        ? this.canvasWidth / 2
-        : ((cards[i].position.left * 0.01) * (this.card.width * this.scalar)) + this.card.sides.left;
+      let xPos: number | undefined = undefined;
+      let yPos: number | undefined = undefined;
 
-      const yPos = (cards[i].position.top === 'center')
-        ? this.canvasHeight / 2
-        : ((cards[i].position.top * 0.01) * (this.cardHeight * this.scalar)) + this.card.sides.top;
+      // Determining X Position
+      if (cards[i].position.left === 'center' || cards[i].position.right === 'center') {
+        xPos = this.canvas.width / 2;
+      } else if (Number.isInteger(cards[i].position.left)) {
+        xPos = this.card.sides.left + ((<number>cards[i].position.left * 0.01) * (this.card.width * this.scalar));
+      } else if (Number.isInteger(cards[i].position.right)) {
+        xPos = this.card.sides.right - ((<number>cards[i].position.right * 0.01) * (this.card.width * this.scalar));
+      }
+
+      // Determining Y Position
+      if (cards[i].position.top === 'center' || cards[i].position.bottom === 'center') {
+        yPos = this.canvas.height / 2;
+      } else if (Number.isInteger(cards[i].position.top)) {
+        yPos = this.card.sides.top + ((<number>cards[i].position.top * 0.01) * (this.card.height * this.scalar));
+      } else if (Number.isInteger(cards[i].position.bottom)) {
+        yPos = this.card.sides.bottom - ((<number>cards[i].position.bottom * 0.01) * (this.card.height * this.scalar));
+      }
+
+      // Make sure values got populated for x and y, throw an error and skip drawing if they didn't
+      if (xPos === undefined || yPos === undefined) {
+        console.error('ERROR: Invalid inputs for input: ' + cards[i].text)
+        continue;
+      }
 
       ctx.fillText(cards[i].text, xPos, yPos);
     }
   }
 }
 
-module.exports = {
-  CardDrawer,
-  Drawable,
-};
+export default CardDrawer;

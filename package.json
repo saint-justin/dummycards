@@ -5,7 +5,7 @@
   "scripts": {
     "start": "parcel index.html",
     "build": "parcel build index.html",
-    "pretest": "eslint . --ext .tsx,.ts --fix",
+    "pretest": "eslint ./src/**/* --ext .tsx,.ts,.d.ts --fix",
     "test": "echo \"Tests Complete\"",
     "typecheck": "tsc --noEmit",
     "typewatch": "tsc --noEmit --watch"
@@ -13,17 +13,18 @@
   "license": "MIT",
   "dependencies": {
     "@apollo/client": "^3.4.7",
-    "@typescript-eslint/parser": "^4.29.1",
     "react": "^16.13.1",
     "react-dom": "^16.13.1"
   },
   "devDependencies": {
     "@babel/preset-typescript": "^7.10.4",
     "@parcel/transformer-sass": "^2.0.0-rc.0",
+    "@parcel/transformer-typescript-tsc": "^2.0.0-beta.3.1",
     "@types/graphql": "^14.5.0",
     "@types/react": "^16.9.34",
     "@types/react-dom": "^16.9.7",
     "@typescript-eslint/eslint-plugin": "^4.29.1",
+    "@typescript-eslint/parser": "^4.29.2",
     "apollo": "^2.33.6",
     "babel-preset-nano-react-app": "^0.1.0",
     "eslint": "^7.32.0",
