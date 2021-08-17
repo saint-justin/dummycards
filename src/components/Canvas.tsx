@@ -1,10 +1,11 @@
 import * as React from 'react';
 import { useRef, useEffect } from 'react';
 import CardDrawer from '../utils/CanvasHelper'
-import { Drawable } from '../types' 
+import { Drawable, Size } from '../types' 
 
 // Canvas's type
 type Canvas = {
+  size: Size
   drawables?: Drawable[],
 }
 
@@ -12,6 +13,7 @@ type Canvas = {
 const Canvas = (props: Canvas): JSX.Element => {
   const canvasRef: React.RefObject<HTMLCanvasElement> = useRef(null);
   const cardDrawer = new CardDrawer();
+  cardDrawer.updateCardSize(props.size.height, props.size.width);
 
   // Actually draws onto the canvas
   const draw = (ctx: CanvasRenderingContext2D) => {
@@ -33,7 +35,7 @@ const Canvas = (props: Canvas): JSX.Element => {
 
     // Draws main card components
     cardDrawer.drawCardBase(ctx);
-    // cardDrawer.drawCardComponents(ctx, props.drawnComponents);
+    cardDrawer.drawCardComponents(ctx, props.drawables || []);
 
     // Debug outputs for sizing
     ctx.fillStyle = 'tomato';
@@ -41,8 +43,6 @@ const Canvas = (props: Canvas): JSX.Element => {
     ctx.textAlign = 'left';
     ctx.fillText(`Canvas Width: ${canvas.width}   Canvas Height: ${canvas.height}`, 8, 16);
     ctx.fillText(`Card Width: ${cardDrawer.getCardInfo().height}   Card Height: ${cardDrawer.getCardInfo().width}`, 8, 32);
-    // ctx.fillText(`Card Width: ${cardDrawer.cardWidth}   Card Height: ${cardDrawer.cardHeight}`, 8, 32);
-    // console.log(ctx);
   };
 
   // Set up the canvas w/ info needed for drawing

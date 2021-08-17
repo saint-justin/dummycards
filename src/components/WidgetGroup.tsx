@@ -4,7 +4,6 @@ import './WidgetGroup.scss'
 type WidgetGroup = {
   name: string,
   widgetInputSet: JSX.Element[] | undefined,
-  // action?: (e: Event) // Revisit!
 }
 
 export default (props: WidgetGroup): JSX.Element => {

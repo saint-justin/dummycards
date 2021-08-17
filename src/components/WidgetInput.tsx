@@ -1,35 +1,56 @@
 import * as React from 'react';
-// import { useState } from 'react';
+import { useState } from 'react';
+import { Size } from '../types' 
 
 type WidgetInput = {
   name: string,
   placeholder?: string,
   value?: string | number,
   type?: string,
-  button?: boolean,
+  action?: ((s: string | void) => void),
   // getValue: , //Get back to this bad boi
 }
 
 export default (props:WidgetInput): React.ReactElement  => {
+  const [value, setValue] = useState(props.value);
+
   // Helper fxn to clean names for use as ID's
   const cleanName = (str: string): string => `entry_ ${str.replaceAll(' ', '_').toLowerCase()}`;
   const inputRef = React.createRef<HTMLInputElement>();
 
+  const inputChange = (e:React.ChangeEvent<HTMLInputElement>) => { 
+    if (!props.action || !e) {
+      console.error('Error: No onchange function given for component');
+      return;
+    }
+    const target = e.target as HTMLInputElement;
+    setValue(target.value);
+    props.action(target.value);
+  }
+
+  const buttonClicked = ():void => {
+    if (!props.action) {
+      console.error('Error: No function is assigned to button clicked');
+      return;
+    }
+    props.action();
+  }
+
   return (
     <>
-      <label>{props.name}</label>
-      { props.button ?
+      { props.type !== 'button' && <label>{props.name}</label>}
+      { props.type === 'button' ?
         <button
         id={cleanName(props.name)}
-        onClick={()=>{ console.error('Button fxn not yet implemented.')}}
+        onClick={buttonClicked}
         >I'm a button!</button>
         :
         <input placeholder={props.placeholder}
         id={cleanName(props.name)}
         type={props.type}
-        value={props.value}
-        onChange={()=>{ console.error('Onchange input not yet implemented.'); }}
-        ref={inputRef} ></input>
+        value={value}
+        onChange={inputChange}
+        ref={inputRef}></input>
         }
     </>
   )

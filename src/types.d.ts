@@ -2,8 +2,8 @@
 export type Drawable = {
   text: string
   textAlign: 'left' | 'center' | 'right',
-  fillStyle: string,
-  font: string,
+  fillStyle?: string,
+  font?: string,
   position: {
     top: 'center' | 'none' | number,
     bottom: 'center' | 'none' | number,
@@ -12,7 +12,7 @@ export type Drawable = {
   }
 }
 
-type Card = {
+export type Card = {
   height: number | undefined,
   width: number | undefined,
   sides: {
@@ -22,3 +22,8 @@ type Card = {
     bottom: number | undefined,
   }
 }
+
+export type Size = {
+  height: number,
+  width: number,
+};

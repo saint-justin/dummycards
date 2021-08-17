@@ -111,11 +111,6 @@ class CardDrawer {
     console.log('Drawing Card Components...');
     const amt = cards.length;
 
-    ctx.font = '50px serif';
-    ctx.fillStyle = 'tomato';
-    ctx.textAlign = 'center';
-    ctx.fillText('Test Text', this.canvas.width / 2, this.canvas.height / 2);
-
     // Draw out all chunks of text onto the
     for (let i = 0; i < amt; i++) {
       ctx.fillStyle = cards[i].fillStyle || 'black';
