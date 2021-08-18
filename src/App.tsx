@@ -45,7 +45,7 @@ export default (): JSX.Element => {
     widgetInputs.push(<WidgetInput name='Name' placeholder='Dimensions' key='key1'></WidgetInput>);
     widgetInputs.push(<WidgetInput type='number' name='Height' value='1125' key='key2' action={updateHeight}></WidgetInput>);
     widgetInputs.push(<WidgetInput type='number' name='Width' value='825' key='key3' action={updateWidth}></WidgetInput>);
-    widgetInputs.push(<WidgetInput type='button' name='test button' key='key4' action={updateCardDimensions}></WidgetInput>);
+    widgetInputs.push(<WidgetInput type='button' name='Resize Card' key='key4' action={updateCardDimensions}></WidgetInput>);
     setWidgets(widgetInputs);
 
     // Setting up canvas default

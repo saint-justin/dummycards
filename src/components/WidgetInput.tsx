@@ -43,7 +43,7 @@ export default (props:WidgetInput): React.ReactElement  => {
         <button
         id={cleanName(props.name)}
         onClick={buttonClicked}
-        >I'm a button!</button>
+        >{props.name}</button>
         :
         <input placeholder={props.placeholder}
         id={cleanName(props.name)}
