@@ -20,40 +20,27 @@ export default (): JSX.Element => {
   const [drawables, setDrawables] = useState<Drawable[] | undefined>(undefined);
   const [cardSize, setCardSize] = useState(cardDimensions);
 
-  // Callback from child to update card size
-  const updateHeight = (s: string | void): void => { 
+  // Updater function to update card dimensions one at a time
+  const updateOneDimension = (s: string | void, which: 'height' | 'width'): void => {
     if(!s) {
       console.error('Value passed to update card dimensions is not a string');
       return;
     }
-    cardDimensions.height = parseInt(s); 
-    console.log(`New Dimens: (${cardDimensions.width}, ${cardDimensions.height})`) 
-  };
-
-  // Callback from child to update card size
-  const updateWidth = (s: string | void): void => { 
-    if(!s) {
-      console.error('Value passed to update card dimensions is not a string');
-      return;
-    }
-    cardDimensions.width = parseInt(s); 
-    console.log(`New Dimensions: (${cardDimensions.width}, ${cardDimensions.height})`); 
-  };
-
-  // Gets a redraw function from child canvas component to manually call when updating dimensions
-  const getRedrawFromChild = (childRedraw: (n1: number, n2: number) => void) => {
-    console.log('Setting child redraw...');
-    console.log(childRedraw);
-    redraw = () => childRedraw(cardDimensions.height, cardDimensions.width);
-    console.log('Child redraw set up!');
+    cardDimensions[which] = parseInt(s); 
   }
+  const updateHeight = (s: string | void): void => updateOneDimension(s, 'height');
+  const updateWidth = (s: string | void): void => updateOneDimension(s, 'width');
 
   // Sets new dimension sizes and forces an update
   const updateDimensions = (): void => { 
     setCardSize(cardDimensions); 
     redraw();
-    console.log('Setting Card size...'); 
-  };
+  };  
+
+  // Gets a redraw function from child canvas component to manually call when updating dimensions
+  const getRedrawFromChild = (childRedraw: (height: number, width: number) => void) => {
+    redraw = () => childRedraw(cardDimensions.height, cardDimensions.width);
+  }
 
   // Run-once initialization
   useEffect(() => {
