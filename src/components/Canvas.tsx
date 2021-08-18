@@ -1,23 +1,22 @@
 import * as React from 'react';
-import { useRef, useEffect } from 'react';
-import CardDrawer from '../utils/CanvasHelper'
-import { Drawable, Size } from '../types' 
+import { useRef, useEffect, useState } from 'react';
+import CardDrawer from '../utils/CanvasHelper';
+import { Drawable, Size } from '../types';
 
 // Canvas's type
 type Canvas = {
-  size: Size
-  drawables?: Drawable[],
+  size: Size // Size of the card component (height/width)
+  drawables?: Drawable[], // List of all the components to be draw to the card
+  setRedrawInParent:  (child: (height: number, width: number) => void) => void // Fxn to give parent a way to force a redraw
 }
 
 // Component to create and draw to the canvas
 const Canvas = (props: Canvas): JSX.Element => {
   const canvasRef: React.RefObject<HTMLCanvasElement> = useRef(null);
   const cardDrawer = new CardDrawer();
-  cardDrawer.updateCardSize(props.size.height, props.size.width);
 
   // Actually draws onto the canvas
   const draw = (ctx: CanvasRenderingContext2D) => {
-    // Check canvas is real
     if(!canvasRef.current) {
       console.error('ERR: Canvas Element Null')
       return;
@@ -47,9 +46,11 @@ const Canvas = (props: Canvas): JSX.Element => {
 
   // Set up the canvas w/ info needed for drawing
   useEffect(() => {
+    console.log('EFFECT 01 --> Trying to update!')
+
     // Check canvas is real
     if(!canvasRef.current) {
-      console.error('ERROR: Canvas Element Null')
+      console.error('ERROR: Canvas Reference Null')
       return;
     }
 
@@ -64,8 +65,11 @@ const Canvas = (props: Canvas): JSX.Element => {
       console.error('ERROR: Canvas Context Null')
       return;
     }
+
+    // Updates card sizing
+    cardDrawer.updateCardSize(props.size.height, props.size.width);
     draw(ctx);
-  }, [draw]);
+  });
 
   // Resize the canvas when the window's size gets changed
   const redraw = () => {
@@ -77,13 +81,23 @@ const Canvas = (props: Canvas): JSX.Element => {
     draw(ctx);
   }
 
-  // Run-on-first-only to force redraws on window resize
+  const resizeAndRedraw = (height: number, width: number) => {
+    cardDrawer.updateCardSize(height, height);
+    redraw();
+  }
+
+  // Run-onnce to force redraws
   useEffect(() => {
+    // Sets up the parent redraw function on setup
+    props.setRedrawInParent(resizeAndRedraw);
+    console.log('Parent redraw set up!')
+
+    // Event listener to redraw on resize events
     window.addEventListener('resize', redraw);
     return () => window.removeEventListener('resize', redraw);
-  });
+  }, []);
 
-  return <canvas ref={canvasRef} {...props}/>;
+  return <canvas ref={canvasRef} data-refresh={props.size} />;
 };
 
 export default Canvas;

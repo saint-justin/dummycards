@@ -7,22 +7,55 @@ import { Drawable, Size } from './types'
 // import ApolloTestQuery from './ApolloTest';
 import './App.scss';
 
+// Stored externally to prevent force-updates on child components without resetting
 const cardDimensions: Size = {
   height: 1125,
   width: 825
 };
 
-export default (): JSX.Element => {
+let redraw = () => { console.log('Error: Redraw not yet set up!'); };
 
+export default (): JSX.Element => {
   const [widgets, setWidgets] = useState<JSX.Element[] | undefined>(undefined);
   const [drawables, setDrawables] = useState<Drawable[] | undefined>(undefined);
   const [cardSize, setCardSize] = useState(cardDimensions);
 
-  const updateHeight = (h: number): void => { cardDimensions.height = h; console.log('Height changed') };
-  const updateWidth = (w: number): void => { cardDimensions.width = w; console.log('Width changed'); };
-  const updateDimensions = (): void => { setCardSize(cardDimensions); console.log('Button pressed'); };
+  // Callback from child to update card size
+  const updateHeight = (s: string | void): void => { 
+    if(!s) {
+      console.error('Value passed to update card dimensions is not a string');
+      return;
+    }
+    cardDimensions.height = parseInt(s); 
+    console.log(`New Dimens: (${cardDimensions.width}, ${cardDimensions.height})`) 
+  };
 
-  // Initialization
+  // Callback from child to update card size
+  const updateWidth = (s: string | void): void => { 
+    if(!s) {
+      console.error('Value passed to update card dimensions is not a string');
+      return;
+    }
+    cardDimensions.width = parseInt(s); 
+    console.log(`New Dimensions: (${cardDimensions.width}, ${cardDimensions.height})`); 
+  };
+
+  // Gets a redraw function from child canvas component to manually call when updating dimensions
+  const getRedrawFromChild = (childRedraw: (n1: number, n2: number) => void) => {
+    console.log('Setting child redraw...');
+    console.log(childRedraw);
+    redraw = () => childRedraw(cardDimensions.height, cardDimensions.width);
+    console.log('Child redraw set up!');
+  }
+
+  // Sets new dimension sizes and forces an update
+  const updateDimensions = (): void => { 
+    setCardSize(cardDimensions); 
+    redraw();
+    console.log('Setting Card size...'); 
+  };
+
+  // Run-once initialization
   useEffect(() => {
     // Setting up all widgets
     const widgetInputs = [];
@@ -42,8 +75,8 @@ export default (): JSX.Element => {
         top: 'center',
         bottom: 'none',
         left: 'center',
-        right: 'none'
-      }
+        right: 'none',
+      },
     }
 
     setDrawables([demo_01]);
@@ -52,11 +85,10 @@ export default (): JSX.Element => {
   return (
   <>
     <section id='widget-toolbar'>
-      {/* <WidgetInput name='TestInput' placeholder='TestInfo'/>*/}
       <WidgetGroup widgetInputSet={widgets} name='Widget Group'/>
     </section>
     <div id='display'>
-      <Canvas drawables={drawables} size={cardSize}/>
+      <Canvas drawables={drawables} size={cardSize} setRedrawInParent={getRedrawFromChild}/>
     </div>
   </>
 )};

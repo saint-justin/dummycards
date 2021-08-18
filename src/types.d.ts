@@ -27,3 +27,5 @@ export type Size = {
   height: number,
   width: number,
 };
+
+export interface FxnFxn = ((fxn: () => void) => void);
