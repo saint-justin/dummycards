@@ -19,7 +19,6 @@ let redraw = () => { console.log('Error: Redraw not yet set up!'); };
 export default (): JSX.Element => {
   const [widgets, setWidgets] = useState<JSX.Element[] | undefined>(undefined);
   const [drawables, setDrawables] = useState<Drawable[] | undefined>(undefined);
-  // const [cardSize, setCardSize] = useState(cardDimensions);
 
   // Updater function to update card dimensions one at a time
   const updateOneDimension = (s: string | void, which: 'height' | 'width'): void => {
@@ -33,6 +32,7 @@ export default (): JSX.Element => {
   const updateWidth = (s: string | void): void => updateOneDimension(s, 'width');
   const updateCardDimensions = () => redraw();
 
+
   // Gets a redraw function from child canvas component to manually call when updating dimensions
   const getRedrawFromChild = (childRedraw: (height: number, width: number) => void) => {
     redraw = () => childRedraw(cardDimensions.height, cardDimensions.width);
@@ -40,13 +40,21 @@ export default (): JSX.Element => {
 
   // Run-once initialization
   useEffect(() => {
+    const widgetGroups = []
     // Setting up all widgets
-    const widgetInputs = [];
-    widgetInputs.push(<WidgetInput name='Name' placeholder='Dimensions' key='key1'></WidgetInput>);
-    widgetInputs.push(<WidgetInput type='number' name='Height' value='1125' key='key2' action={updateHeight}></WidgetInput>);
-    widgetInputs.push(<WidgetInput type='number' name='Width' value='825' key='key3' action={updateWidth}></WidgetInput>);
-    widgetInputs.push(<WidgetInput type='button' name='Resize Card' key='key4' action={updateCardDimensions}></WidgetInput>);
-    setWidgets(widgetInputs);
+    const dimensionInputs = [];
+    dimensionInputs.push(<WidgetInput type='number' name='Height' value='1125' key='dimensions_height' action={updateHeight}></WidgetInput>);
+    dimensionInputs.push(<WidgetInput type='number' name='Width' value='825' key='dimensions_width' action={updateWidth}></WidgetInput>);
+    dimensionInputs.push(<WidgetInput type='button' name='Resize Card' key='dimensions_button' action={updateCardDimensions}></WidgetInput>);
+    widgetGroups.push(<WidgetGroup name='Card Dimensions' widgetInputSet={dimensionInputs}></WidgetGroup>)
+
+    const testTextInputs = [];
+    testTextInputs.push(<WidgetInput name='Placeholder Text' value='placeholder' key='test_text' action={updateHeight}></WidgetInput>)
+    testTextInputs.push(<WidgetInput type='text' name='Left' value='0' key='test_left' action={updateHeight}></WidgetInput>)
+    testTextInputs.push(<WidgetInput type='text' name='Top' value='center' key='test_top' action={updateHeight}></WidgetInput>)
+    widgetGroups.push(<WidgetGroup name='Text Input' widgetInputSet={testTextInputs}></WidgetGroup>)
+
+    setWidgets(widgetGroups);
 
     // Setting up canvas default
     const demo_01: Drawable = {
@@ -68,7 +76,7 @@ export default (): JSX.Element => {
   return (
   <>
     <section id='widget-toolbar'>
-      <WidgetGroup widgetInputSet={widgets} name='Widget Group'/>
+      {widgets}
     </section>
     <div id='display'>
       <Canvas drawables={drawables} size={cardDimensions} setRedrawInParent={getRedrawFromChild}/>
