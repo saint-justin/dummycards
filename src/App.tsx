@@ -7,18 +7,19 @@ import { Drawable, Size } from './types'
 // import ApolloTestQuery from './ApolloTest';
 import './App.scss';
 
-// Stored externally to prevent force-updates on child components without resetting
+// Stored externally to prevent force-updates on child components
+// Dimensions of the card
 const cardDimensions: Size = {
   height: 1125,
   width: 825
 };
-
+// Function to redraw components in the child
 let redraw = () => { console.log('Error: Redraw not yet set up!'); };
 
 export default (): JSX.Element => {
   const [widgets, setWidgets] = useState<JSX.Element[] | undefined>(undefined);
   const [drawables, setDrawables] = useState<Drawable[] | undefined>(undefined);
-  const [cardSize, setCardSize] = useState(cardDimensions);
+  // const [cardSize, setCardSize] = useState(cardDimensions);
 
   // Updater function to update card dimensions one at a time
   const updateOneDimension = (s: string | void, which: 'height' | 'width'): void => {
@@ -30,12 +31,7 @@ export default (): JSX.Element => {
   }
   const updateHeight = (s: string | void): void => updateOneDimension(s, 'height');
   const updateWidth = (s: string | void): void => updateOneDimension(s, 'width');
-
-  // Sets new dimension sizes and forces an update
-  const updateDimensions = (): void => { 
-    setCardSize(cardDimensions); 
-    redraw();
-  };  
+  const updateCardDimensions = () => redraw();
 
   // Gets a redraw function from child canvas component to manually call when updating dimensions
   const getRedrawFromChild = (childRedraw: (height: number, width: number) => void) => {
@@ -49,7 +45,7 @@ export default (): JSX.Element => {
     widgetInputs.push(<WidgetInput name='Name' placeholder='Dimensions' key='key1'></WidgetInput>);
     widgetInputs.push(<WidgetInput type='number' name='Height' value='1125' key='key2' action={updateHeight}></WidgetInput>);
     widgetInputs.push(<WidgetInput type='number' name='Width' value='825' key='key3' action={updateWidth}></WidgetInput>);
-    widgetInputs.push(<WidgetInput type='button' name='test button' key='key4' action={updateDimensions}></WidgetInput>);
+    widgetInputs.push(<WidgetInput type='button' name='test button' key='key4' action={updateCardDimensions}></WidgetInput>);
     setWidgets(widgetInputs);
 
     // Setting up canvas default
@@ -75,7 +71,7 @@ export default (): JSX.Element => {
       <WidgetGroup widgetInputSet={widgets} name='Widget Group'/>
     </section>
     <div id='display'>
-      <Canvas drawables={drawables} size={cardSize} setRedrawInParent={getRedrawFromChild}/>
+      <Canvas drawables={drawables} size={cardDimensions} setRedrawInParent={getRedrawFromChild}/>
     </div>
   </>
 )};

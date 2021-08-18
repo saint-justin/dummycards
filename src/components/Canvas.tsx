@@ -82,7 +82,7 @@ const Canvas = (props: Canvas): JSX.Element => {
   }
 
   const resizeAndRedraw = (height: number, width: number) => {
-    cardDrawer.updateCardSize(height, height);
+    cardDrawer.updateCardSize(height, width);
     redraw();
   }
 
