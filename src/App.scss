@@ -24,3 +24,13 @@ html, body, #root {
   background-color: #262626;
   flex: 1;
 }
+
+.flex-row {
+  display: flex;
+  flex-direction: row;
+  input {
+    margin-left: 8px;
+    flex-grow: 1;
+    min-width: 0;
+  }
+}

@@ -8,7 +8,6 @@ type WidgetInput = {
   value?: string | number,
   type?: string,
   action?: ((s: string | void) => void),
-  // getValue: , //Get back to this bad boi
 }
 
 export default (props:WidgetInput): React.ReactElement  => {
@@ -38,6 +37,7 @@ export default (props:WidgetInput): React.ReactElement  => {
 
   return (
     <>
+      {/* Disable labels for buttons */}
       { props.type !== 'button' && <label>{props.name}</label>}
       { props.type === 'button' ?
         <button

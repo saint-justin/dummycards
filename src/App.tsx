@@ -1,10 +1,10 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
 import WidgetInput from './components/WidgetInput';
+import WidgetDropdown from './components/WidgetDropdown';
 import WidgetGroup from './components/WidgetGroup';
 import Canvas from './components/Canvas';
-import { Drawable, Size } from './types'
-// import ApolloTestQuery from './ApolloTest';
+import { Drawable, Size } from './types';
 import './App.scss';
 
 // Stored externally to prevent force-updates on child components
@@ -31,6 +31,7 @@ export default (): JSX.Element => {
   const updateHeight = (s: string | void): void => updateOneDimension(s, 'height');
   const updateWidth = (s: string | void): void => updateOneDimension(s, 'width');
   const updateCardDimensions = () => redraw();
+  const UNIMPLIMENTED = () => { console.error(`ERROR: This component's action has not yet been implemented`)}
 
 
   // Gets a redraw function from child canvas component to manually call when updating dimensions
@@ -49,9 +50,10 @@ export default (): JSX.Element => {
     widgetGroups.push(<WidgetGroup name='Card Dimensions' widgetInputSet={dimensionInputs}></WidgetGroup>)
 
     const testTextInputs = [];
-    testTextInputs.push(<WidgetInput name='Placeholder Text' value='placeholder' key='test_text' action={updateHeight}></WidgetInput>)
-    testTextInputs.push(<WidgetInput type='text' name='Left' value='0' key='test_left' action={updateHeight}></WidgetInput>)
-    testTextInputs.push(<WidgetInput type='text' name='Top' value='center' key='test_top' action={updateHeight}></WidgetInput>)
+    testTextInputs.push(<WidgetInput name='Placeholder Testing Text' value='placeholder_name' key='test_text' action={UNIMPLIMENTED}></WidgetInput>)
+    testTextInputs.push(<WidgetDropdown name='Horizontal Alignment' value='10' key='test_drop' action={UNIMPLIMENTED} options={['Left (%)', 'Right (%)', 'Center']}></WidgetDropdown>)
+    // testTextInputs.push(<WidgetInput type='text' name='Left' value='0' key='test_left' action={UNIMPLIMENTED}></WidgetInput>)
+    // testTextInputs.push(<WidgetInput type='text' name='Top' value='center' key='test_top' action={UNIMPLIMENTED}></WidgetInput>)
     widgetGroups.push(<WidgetGroup name='Text Input' widgetInputSet={testTextInputs}></WidgetGroup>)
 
     setWidgets(widgetGroups);
