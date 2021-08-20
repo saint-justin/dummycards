@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState } from 'react';
-import { Size } from '../types' 
+import { WInput, DrawableProperty } from '../types' 
 
 type WidgetDropdown = {
   name: string,
@@ -8,7 +8,7 @@ type WidgetDropdown = {
   placeholder?: string,
   value?: string | number,
   type?: string,
-  action?: ((s: string | void) => void),
+  action?: ((widgetInput: WInput) => void),
 }
 
 export default (props:WidgetDropdown): React.ReactElement  => {
@@ -19,6 +19,7 @@ export default (props:WidgetDropdown): React.ReactElement  => {
   const cleanName = (str: string): string => `entry_ ${str.replaceAll(' ', '_').toLowerCase()}`;
   const inputRef = React.createRef<HTMLInputElement>();
 
+  // Input Change Handler
   const inputChange = (e:React.ChangeEvent<HTMLInputElement>) => { 
     if (!props.action || !e) {
       console.error('Error: No onchange function given for component');
@@ -26,17 +27,7 @@ export default (props:WidgetDropdown): React.ReactElement  => {
     }
     const target = e.target as HTMLInputElement;
     setValue(target.value);
-    props.action(target.value);
-  }
-
-  const handleSelectChange = (e:React.ChangeEvent<HTMLInputElement>) => {
-    if (!e) {
-      console.error('Error: Select handle event returned faulty value');
-      return;
-    }
-
-    if (e.target.value === 'center') setCenterSelected(true);
-    else setCenterSelected(false);
+    props.action({ value: target.value, property: 'fillStyle'});
   }
 
   return (

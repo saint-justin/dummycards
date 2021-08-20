@@ -12,6 +12,7 @@ export type Drawable = {
   }
 }
 
+// Info that each card holds and prints
 export type Card = {
   height: number | undefined,
   width: number | undefined,
@@ -23,9 +24,18 @@ export type Card = {
   }
 }
 
+// Size for cards
 export type Size = {
   height: number,
   width: number,
 };
 
+// Simple callback for drawables
 export type DrawableCallback = () => Drawable;
+
+// Widget Info Types
+export type DrawableProperty = 'text' | 'textAlign' | 'fillStyle' | 'font' | 'top' | 'bottom' | 'left' | 'right';
+export type WInput = { 
+  property: DrawableProperty,
+  value: string, 
+};

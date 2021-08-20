@@ -38,7 +38,6 @@ export default (): JSX.Element => {
   const updateHeight = (s: string | void): void => updateOneDimension(s, 'height');
   const updateWidth = (s: string | void): void => updateOneDimension(s, 'width');
   const updateCardDimensions = () => redraw();
-  const UNIMPLIMENTED = () => { console.error(`ERROR: This component's action has not yet been implemented`)};
 
   // Gets a redraw function from child canvas component to manually call when updating dimensions
   const getRedrawFromChild = (childRedraw: (height: number, width: number) => void) => {
@@ -53,8 +52,6 @@ export default (): JSX.Element => {
   // Updater function fo update drawable objects
   const updateAllDrawables = (): void => {
     // Return early if there's nothing to show
-    // console.log(Array.from(drawableGetters.entries()).length)
-    // return;
     if(Array.from(drawableGetters.entries()).length === 0) return;
 
     // Grabs all the drawable getters from their objects
@@ -71,10 +68,7 @@ export default (): JSX.Element => {
       updated.push(getDrawable());
     }
 
-    console.log('Updated drawable array generated.');
-    console.log(updated);
-
-    setDrawables(updated); // REIMPLEMENT WHEN FINISHED
+    setDrawables(updated);
   }
 
 
@@ -87,7 +81,7 @@ export default (): JSX.Element => {
   // Run-once initialization
   useEffect(() => {
     // Array to hold all widget groups
-    const widgetGroups = []
+    const widgetGroups = [];
 
     // Creating a first widget to house the Card's dimensions
     const dimensionInputs = [];
@@ -107,10 +101,10 @@ export default (): JSX.Element => {
 
     // Creating a second widget to allow users to submit info to be displayed
     const testTextInputs = [];
-    testTextInputs.push(<WidgetInput name='Placeholder Testing Text' value='placeholder_name' key='test_text' action={UNIMPLIMENTED}></WidgetInput>)
-    testTextInputs.push(<WidgetDropdown name='Horizontal Alignment' value='10' key='test_dropdown_h' action={UNIMPLIMENTED} options={['Left (%)', 'Right (%)', 'Center']}></WidgetDropdown>)
-    testTextInputs.push(<WidgetDropdown name='Vertical Alignment' value='10' key='test_dropdown_v' action={UNIMPLIMENTED} options={['Top (%)', 'Bottom (%)', 'Center']}></WidgetDropdown>)
-    testTextInputs.push(<WidgetInput type='color' name='Color' value='#00FF00' key='test_color' action={UNIMPLIMENTED}></WidgetInput>)
+    testTextInputs.push(<WidgetInput name='Placeholder Testing Text' value='placeholder_name' key='test_text' property='text'></WidgetInput>)
+    testTextInputs.push(<WidgetDropdown name='Horizontal Alignment' value='10' key='test_dropdown_h' options={['Left', 'Right', 'Center']} initialProperty='left'></WidgetDropdown>)
+    testTextInputs.push(<WidgetDropdown name='Vertical Alignment' value='10' key='test_dropdown_v' options={['Top', 'Bottom', 'Center']} initialProperty='top'></WidgetDropdown>)
+    testTextInputs.push(<WidgetInput type='color' name='Color' value='#00FF00' key='test_color' property='fillStyle'></WidgetInput>)
     widgetGroups.push(
     <WidgetGroup 
       drawable={true} 
