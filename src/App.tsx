@@ -59,7 +59,12 @@ export default (): JSX.Element => {
       }
       updated.push(getDrawable());
     }
+<<<<<<< HEAD
     setDrawables(updated);
+=======
+
+    setDrawables(updated); // REIMPLEMENT WHEN FINISHED
+>>>>>>> b62d9667e0ae752e2042713f8b38f2c64132a8c5
   }
 
   // Update drawables any time the widgets get updated

@@ -114,7 +114,6 @@ class CardDrawer {
       ctx.fillStyle = cards[i].fillStyle || 'black';
       ctx.font = cards[i].font || '20px serif';
       ctx.textAlign = cards[i].textAlign || 'center';
-
       let xPos: number | undefined = undefined;
       let yPos: number | undefined = undefined;
 
@@ -143,6 +142,10 @@ class CardDrawer {
         continue;
       }
 
+<<<<<<< HEAD
+=======
+      // Actually draw the card
+>>>>>>> b62d9667e0ae752e2042713f8b38f2c64132a8c5
       ctx.fillText(cards[i].text, xPos, yPos);
     }
   }
