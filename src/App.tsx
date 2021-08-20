@@ -53,8 +53,6 @@ export default (): JSX.Element => {
   // Updater function fo update drawable objects
   const updateAllDrawables = (): void => {
     // Return early if there's nothing to show
-    // console.log(Array.from(drawableGetters.entries()).length)
-    // return;
     if(Array.from(drawableGetters.entries()).length === 0) return;
 
     // Grabs all the drawable getters from their objects
@@ -70,9 +68,6 @@ export default (): JSX.Element => {
       }
       updated.push(getDrawable());
     }
-
-    console.log('Updated drawable array generated.');
-    console.log(updated);
 
     setDrawables(updated); // REIMPLEMENT WHEN FINISHED
   }

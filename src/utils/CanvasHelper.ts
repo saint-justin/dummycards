@@ -108,18 +108,14 @@ class CardDrawer {
         return;
     }
 
-    console.log('Drawing Card Components...');
     const amt = cards.length;
 
     // Draw out all chunks of text onto the
     for (let i = 0; i < amt; i++) {
-      console.log('Drawing new card!');
-      console.log(cards[i]);
-
+      // Initializing draw vars from card info
       ctx.fillStyle = cards[i].fillStyle || 'black';
       ctx.font = cards[i].font || '20px serif';
       ctx.textAlign = cards[i].textAlign || 'center';
-
       let xPos: number | undefined = undefined;
       let yPos: number | undefined = undefined;
 
@@ -148,7 +144,7 @@ class CardDrawer {
         continue;
       }
 
-      console.log(`Drawing... \nText: "${cards[i].text}"\nPos: (${xPos},${yPos})`)
+      // Actually draw the card
       ctx.fillText(cards[i].text, xPos, yPos);
     }
   }
