@@ -28,4 +28,4 @@ export type Size = {
   width: number,
 };
 
-export interface FxnFxn = ((fxn: () => void) => void);
+export type DrawableCallback = () => Drawable;

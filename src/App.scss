@@ -18,6 +18,10 @@ html, body, #root {
   flex-direction: column;
   overflow-y: auto;
   overflow-x: none;
+
+  * {
+    box-sizing: border-box;
+  }
 }
 
 #display {
@@ -28,9 +32,12 @@ html, body, #root {
 .flex-row {
   display: flex;
   flex-direction: row;
+  margin: 0;
+  padding: 0;
+
   input {
     margin-left: 8px;
-    flex-grow: 1;
+    width: 100%;
     min-width: 0;
   }
 }

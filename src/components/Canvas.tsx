@@ -46,8 +46,6 @@ const Canvas = (props: Canvas): JSX.Element => {
 
   // Set up the canvas w/ info needed for drawing
   useEffect(() => {
-    console.log('EFFECT 01 --> Trying to update!')
-
     // Check canvas is real
     if(!canvasRef.current) {
       console.error('ERROR: Canvas Reference Null')
@@ -90,7 +88,6 @@ const Canvas = (props: Canvas): JSX.Element => {
   useEffect(() => {
     // Sets up the parent redraw function on setup
     props.setRedrawInParent(resizeAndRedraw);
-    console.log('Parent redraw set up!')
 
     // Event listener to redraw on resize events
     window.addEventListener('resize', redraw);

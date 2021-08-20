@@ -113,6 +113,9 @@ class CardDrawer {
 
     // Draw out all chunks of text onto the
     for (let i = 0; i < amt; i++) {
+      console.log('Drawing new card!');
+      console.log(cards[i]);
+
       ctx.fillStyle = cards[i].fillStyle || 'black';
       ctx.font = cards[i].font || '20px serif';
       ctx.textAlign = cards[i].textAlign || 'center';
@@ -141,9 +144,11 @@ class CardDrawer {
       // Make sure values got populated for x and y, throw an error and skip drawing if they didn't
       if (xPos === undefined || yPos === undefined) {
         console.error('ERROR: Invalid inputs for input: ' + cards[i].text)
+        console.error(`x,y: (${xPos},${yPos})`)
         continue;
       }
 
+      console.log(`Drawing... \nText: "${cards[i].text}"\nPos: (${xPos},${yPos})`)
       ctx.fillText(cards[i].text, xPos, yPos);
     }
   }
