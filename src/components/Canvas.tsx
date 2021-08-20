@@ -84,10 +84,11 @@ const Canvas = (props: Canvas): JSX.Element => {
     redraw();
   }
 
-  // Run-onnce to force redraws
+  // Run-once to allow force redraws from parent
   useEffect(() => {
     // Sets up the parent redraw function on setup
     props.setRedrawInParent(resizeAndRedraw);
+    console.log('Resize set in parent from canvas!');
 
     // Event listener to redraw on resize events
     window.addEventListener('resize', redraw);

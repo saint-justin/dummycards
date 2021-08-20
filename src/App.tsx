@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as _ from 'lodash';
 import { useState, useEffect } from 'react';
-import { Drawable, Size, DrawableCallback } from './types';
+import { Drawable, Size, DrawableCallback, WInput } from './types';
 
 import WidgetInput from './components/WidgetInput';
 import WidgetDropdown from './components/WidgetDropdown';
@@ -10,22 +10,14 @@ import Canvas from './components/Canvas';
 
 import './App.scss';
 
-// Stored externally to prevent resets on refreshes
-// Dimensions of the card
-const cardDimensions: Size = {
-  height: 1125,
-  width: 825
-};
-
 // List of all the drawable getters based on their keys
 const drawableGetters = new Map<string, (()=>Drawable)>();
 
-// Redraws components in the canvas
-let redraw = () => { console.error('Error: Redraw not yet set up!'); };
-
 export default (): JSX.Element => {
+  const [cardDimensions, setCardDimensions] = useState<Size>({ height: 1125, width: 825});
   const [widgets, setWidgets] = useState<JSX.Element[] | undefined>(undefined);
   const [drawables, setDrawables] = useState<Drawable[] | undefined>(undefined);
+  const [redraw, setRedraw] = useState<() => void>(() => { console.error('Error: Redraw not yet set up!'); });
 
   // Updater function to update card dimensions one at a time
   const updateOneDimension = (s: string | void, which: 'height' | 'width'): void => {
@@ -33,15 +25,16 @@ export default (): JSX.Element => {
       console.error('Value passed to update card dimensions is not a string');
       return;
     }
-    cardDimensions[which] = parseInt(s); 
+    const dimensionsClone = _.cloneDeep(cardDimensions);
+    dimensionsClone[which] = parseInt(s);
+    setCardDimensions(dimensionsClone); 
   };
-  const updateHeight = (s: string | void): void => updateOneDimension(s, 'height');
-  const updateWidth = (s: string | void): void => updateOneDimension(s, 'width');
-  const updateCardDimensions = () => redraw();
+  const updateHeight = (newDimension: WInput): void => updateOneDimension(newDimension.value, 'height');
+  const updateWidth = (newDimension: WInput): void => updateOneDimension(newDimension.value, 'width');
 
   // Gets a redraw function from child canvas component to manually call when updating dimensions
   const getRedrawFromChild = (childRedraw: (height: number, width: number) => void) => {
-    redraw = () => childRedraw(cardDimensions.height, cardDimensions.width);
+    setRedraw(() => childRedraw(cardDimensions.height, cardDimensions.width));
   }
 
   // Stores a drawable getter function and a key as passed from child into drawableGetters
@@ -54,10 +47,9 @@ export default (): JSX.Element => {
     // Return early if there's nothing to show
     if(Array.from(drawableGetters.entries()).length === 0) return;
 
-    // Grabs all the drawable getters from their objects
+    // Grabs all the drawable getters from their objects and returns updated drawables
     const updated: Drawable[] = [];
     const keys = Array.from(drawableGetters.keys());
-
     const keysLen = keys.length;
     for(let i=0; i<keysLen; i++) {
       const getDrawable = drawableGetters.get(keys[i]);
@@ -67,16 +59,28 @@ export default (): JSX.Element => {
       }
       updated.push(getDrawable());
     }
-
     setDrawables(updated);
   }
 
-
   // Update drawables any time the widgets get updated
   useEffect(() => {
-    if(!drawableGetters.keys) return;
+    if (!drawableGetters.keys) return;
     updateAllDrawables();
   }, [widgets, drawableGetters])
+
+  // Redraw when updating drawables has finished
+  useEffect(() => {
+    console.log('Trying to redraw...');
+    if (!drawables || redraw === undefined) {
+      console.error('Error: Trying to redraw without a redraw fxn or without drawables');
+      console.log('Drawables:');
+      console.log(drawables);
+      console.log('Redraw Function:');
+      console.log(redraw);
+      return;
+    }
+    redraw();
+  }, [drawables]);
 
   // Run-once initialization
   useEffect(() => {
@@ -85,9 +89,8 @@ export default (): JSX.Element => {
 
     // Creating a first widget to house the Card's dimensions
     const dimensionInputs = [];
-    dimensionInputs.push(<WidgetInput type='number' name='Height' value='1125' key='dimensions_height' action={updateHeight}></WidgetInput>);
-    dimensionInputs.push(<WidgetInput type='number' name='Width' value='825' key='dimensions_width' action={updateWidth}></WidgetInput>);
-    dimensionInputs.push(<WidgetInput type='button' name='Resize Card' key='dimensions_button' action={updateCardDimensions}></WidgetInput>);
+    dimensionInputs.push(<WidgetInput type='number' name='Height' value='1125' key='dimensions_height' action={updateHeight} property='text'></WidgetInput>);
+    dimensionInputs.push(<WidgetInput type='number' name='Width' value='825' key='dimensions_width' action={updateWidth} property='text'></WidgetInput>);
     widgetGroups.push(
     <WidgetGroup 
       drawable={false} 
@@ -96,7 +99,7 @@ export default (): JSX.Element => {
       index={0}
       key={0}
       drawableGetter={createDrawableGetter}
-      ></WidgetGroup>
+    ></WidgetGroup>
     )
 
     // Creating a second widget to allow users to submit info to be displayed
@@ -113,7 +116,7 @@ export default (): JSX.Element => {
       index={1}
       key={1}
       drawableGetter={createDrawableGetter}
-      ></WidgetGroup>
+    ></WidgetGroup>
     );
 
     // Set our collection of widgets into state
@@ -126,7 +129,11 @@ export default (): JSX.Element => {
       {widgets}
     </section>
     <div id='display'>
-      <Canvas drawables={drawables} size={cardDimensions} setRedrawInParent={getRedrawFromChild}/>
+      <Canvas 
+        drawables={drawables} 
+        size={cardDimensions} 
+        setRedrawInParent={getRedrawFromChild}
+      />
     </div>
   </>
 )};

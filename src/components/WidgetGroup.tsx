@@ -10,7 +10,7 @@ type WidgetGroup = {
   drawable: boolean,
   index: number,
   drawableGetter: (key: string, callback: DrawableCallback) => void;
-}
+};
 
 export default (props: WidgetGroup): JSX.Element => {
   const [drawable, setDrawable] = useState<Drawable>({
@@ -22,8 +22,8 @@ export default (props: WidgetGroup): JSX.Element => {
       right: 'none',
       top: 'center',
       bottom: 'none',
-    }
-  })
+    },
+  });
 
   const widgetActionDefault = (updateInfo: WInput): void => {
     const drawableClone = _.cloneDeep(drawable);
