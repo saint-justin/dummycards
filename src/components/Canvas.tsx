@@ -1,5 +1,5 @@
 import * as React from 'react';
-import { useRef, useEffect, useState } from 'react';
+import { useRef, useEffect } from 'react';
 import CardDrawer from '../utils/CanvasHelper';
 import { Drawable, Size } from '../types';
 
@@ -7,7 +7,7 @@ import { Drawable, Size } from '../types';
 type Canvas = {
   size: Size // Size of the card component (height/width)
   drawables?: Drawable[], // List of all the components to be draw to the card
-  setRedrawInParent:  (child: (height: number, width: number) => void) => void // Fxn to give parent a way to force a redraw
+  // setRedrawInParent:  (child: (height: number, width: number) => void) => void // Fxn to give parent a way to force a redraw
 }
 
 // Component to create and draw to the canvas
@@ -44,8 +44,20 @@ const Canvas = (props: Canvas): JSX.Element => {
     ctx.fillText(`Card Width: ${cardDrawer.getCardInfo().height}   Card Height: ${cardDrawer.getCardInfo().width}`, 8, 32);
   };
 
+  // Redraws the canvas
+  const redraw = () => {
+    const ctx = canvasRef.current?.getContext('2d');
+    if (!ctx) {
+      console.error('ERROR: Canvas Context Null')
+      return;
+    }
+    draw(ctx);
+  }
+
   // Set up the canvas w/ info needed for drawing
   useEffect(() => {
+    console.log('useEffect triggered in canvas...')
+
     // Check canvas is real
     if(!canvasRef.current) {
       console.error('ERROR: Canvas Reference Null')
@@ -70,14 +82,7 @@ const Canvas = (props: Canvas): JSX.Element => {
   });
 
   // Resize the canvas when the window's size gets changed
-  const redraw = () => {
-    const ctx = canvasRef.current?.getContext('2d');
-    if (!ctx) {
-      console.error('ERROR: Canvas Context Null')
-      return;
-    }
-    draw(ctx);
-  }
+  // const redraw = 
 
   const resizeAndRedraw = (height: number, width: number) => {
     cardDrawer.updateCardSize(height, width);
@@ -87,8 +92,8 @@ const Canvas = (props: Canvas): JSX.Element => {
   // Run-once to allow force redraws from parent
   useEffect(() => {
     // Sets up the parent redraw function on setup
-    props.setRedrawInParent(resizeAndRedraw);
-    console.log('Resize set in parent from canvas!');
+    // props.setRedrawInParent(resizeAndRedraw);
+    // console.log('Resize set in parent from canvas!');
 
     // Event listener to redraw on resize events
     window.addEventListener('resize', redraw);

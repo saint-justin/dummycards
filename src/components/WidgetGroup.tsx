@@ -9,10 +9,12 @@ type WidgetGroup = {
   widgetInputSet: JSX.Element[] | undefined,
   drawable: boolean,
   index: number,
-  drawableGetter: (key: string, callback: DrawableCallback) => void;
+  drawableChanged: (d: Drawable, id: string) => void,
 };
 
 export default (props: WidgetGroup): JSX.Element => {
+  // Default drawable object that gets passed up to parent and over to canvas
+  const [id] = useState<string>(`name_${Date.now()}`);
   const [drawable, setDrawable] = useState<Drawable>({
     text: '',
     fillStyle: '#000000',
@@ -25,15 +27,21 @@ export default (props: WidgetGroup): JSX.Element => {
     },
   });
 
+  // Push updates to drawables into app.tsx
+  useEffect(() => {
+    console.log('ID: ' + id);
+    props.drawableChanged(drawable, id);
+  }, [drawable])
+
+  // Defines what the widget should do any time we're trying to update internal drawable info
   const widgetActionDefault = (updateInfo: WInput): void => {
     const drawableClone = _.cloneDeep(drawable);
     switch(updateInfo.property) {
-      case 'text':
-      case 'fillStyle':
-      case 'font':
+      case 'text' || 'fillStyle' || 'font':
         drawableClone[updateInfo.property] = updateInfo.value;
         setDrawable(drawableClone);
         return;
+        
       case 'textAlign':
         console.log('updateInfo');
         console.log(updateInfo);
@@ -41,12 +49,11 @@ export default (props: WidgetGroup): JSX.Element => {
           console.error(`Error: Tried setting drawable property 'textAlign' to illegal value (${updateInfo.value})`);
           return;
         } 
-        drawable[updateInfo.property] = updateInfo.value;
+        drawableClone[updateInfo.property] = updateInfo.value;
+        setDrawable(drawableClone);
         return;
-      case 'top':
-      case 'bottom':
-      case 'left':
-      case 'right':
+
+      case 'top'|| 'bottom' ||'left' || 'right':
         if (Number.isInteger(parseInt(updateInfo.value))) {
           drawableClone.position[updateInfo.property] = parseInt(updateInfo.value);
         } else if (updateInfo.value === 'center' || updateInfo.value === 'none') {
@@ -75,7 +82,7 @@ export default (props: WidgetGroup): JSX.Element => {
     })
   }
 
-  // One-time initialization
+  // One-time initialization, setting up the basic values for the below inputs
   useEffect(() => {
     if (props.widgetInputSet) {
       props.widgetInputSet.forEach((element:JSX.Element) => {
@@ -85,14 +92,12 @@ export default (props: WidgetGroup): JSX.Element => {
         if (element.props.name === 'Placeholder Testing Text') drawable.text = element.props.value || 'No text found';
       })
     }
-
-    // Pass an internal drawable getter up into the parent for parent reference
-    if (props.drawable) props.drawableGetter(props.index.toString(), (): Drawable => drawable);
   }, []);
 
+  // The actual JSX to be returned
   return (
     <div className='widget-group'>
-      <h3>{props.name}</h3>
+      <h3>{ props.name }</h3>
       { appendActions(props.widgetInputSet) }
     </div>
   )

@@ -1,7 +1,7 @@
 import * as React from 'react';
 import * as _ from 'lodash';
 import { useState, useEffect } from 'react';
-import { Drawable, Size, DrawableCallback, WInput } from './types';
+import { Drawable, Size, WInput } from './types';
 
 import WidgetInput from './components/WidgetInput';
 import WidgetDropdown from './components/WidgetDropdown';
@@ -10,14 +10,10 @@ import Canvas from './components/Canvas';
 
 import './App.scss';
 
-// List of all the drawable getters based on their keys
-const drawableGetters = new Map<string, (()=>Drawable)>();
-
 export default (): JSX.Element => {
   const [cardDimensions, setCardDimensions] = useState<Size>({ height: 1125, width: 825});
   const [widgets, setWidgets] = useState<JSX.Element[] | undefined>(undefined);
-  const [drawables, setDrawables] = useState<Drawable[] | undefined>(undefined);
-  const [redraw, setRedraw] = useState<() => void>(() => { console.error('Error: Redraw not yet set up!'); });
+  const [drawables, setDrawables] = useState<Map<string, Drawable>>(new Map<string, Drawable>());
 
   // Updater function to update card dimensions one at a time
   const updateOneDimension = (s: string | void, which: 'height' | 'width'): void => {
@@ -32,60 +28,12 @@ export default (): JSX.Element => {
   const updateHeight = (newDimension: WInput): void => updateOneDimension(newDimension.value, 'height');
   const updateWidth = (newDimension: WInput): void => updateOneDimension(newDimension.value, 'width');
 
-  // Gets a redraw function from child canvas component to manually call when updating dimensions
-  const getRedrawFromChild = (childRedraw: (height: number, width: number) => void) => {
-    setRedraw(() => childRedraw(cardDimensions.height, cardDimensions.width));
+  // Callback to a drawable in the map from a widget group based on its id
+  const updateDrawableFromWidgetGroup = (d: Drawable, id: string) => {
+    const clone = _.cloneDeep(drawables);
+    clone.set(id, d);
+    setDrawables(clone);
   }
-
-  // Stores a drawable getter function and a key as passed from child into drawableGetters
-  const createDrawableGetter = (key: string, callback: DrawableCallback):void => {
-    drawableGetters.set(key, callback);
-  }
-
-  // Updater function fo update drawable objects
-  const updateAllDrawables = (): void => {
-    // Return early if there's nothing to show
-    if(Array.from(drawableGetters.entries()).length === 0) return;
-
-    // Grabs all the drawable getters from their objects and returns updated drawables
-    const updated: Drawable[] = [];
-    const keys = Array.from(drawableGetters.keys());
-    const keysLen = keys.length;
-    for(let i=0; i<keysLen; i++) {
-      const getDrawable = drawableGetters.get(keys[i]);
-      if (!getDrawable) {
-        console.error('Drawable getter undefined for element with key ' + keys[i]);
-        continue;
-      }
-      updated.push(getDrawable());
-    }
-<<<<<<< HEAD
-    setDrawables(updated);
-=======
-
-    setDrawables(updated); // REIMPLEMENT WHEN FINISHED
->>>>>>> b62d9667e0ae752e2042713f8b38f2c64132a8c5
-  }
-
-  // Update drawables any time the widgets get updated
-  useEffect(() => {
-    if (!drawableGetters.keys) return;
-    updateAllDrawables();
-  }, [widgets, drawableGetters])
-
-  // Redraw when updating drawables has finished
-  useEffect(() => {
-    console.log('Trying to redraw...');
-    if (!drawables || redraw === undefined) {
-      console.error('Error: Trying to redraw without a redraw fxn or without drawables');
-      console.log('Drawables:');
-      console.log(drawables);
-      console.log('Redraw Function:');
-      console.log(redraw);
-      return;
-    }
-    redraw();
-  }, [drawables]);
 
   // Run-once initialization
   useEffect(() => {
@@ -103,7 +51,7 @@ export default (): JSX.Element => {
       widgetInputSet={dimensionInputs}
       index={0}
       key={0}
-      drawableGetter={createDrawableGetter}
+      drawableChanged={updateDrawableFromWidgetGroup}
     ></WidgetGroup>
     )
 
@@ -120,13 +68,20 @@ export default (): JSX.Element => {
       widgetInputSet={testTextInputs}
       index={1}
       key={1}
-      drawableGetter={createDrawableGetter}
-    ></WidgetGroup>
+      drawableChanged={updateDrawableFromWidgetGroup}
+      ></WidgetGroup>
     );
 
     // Set our collection of widgets into state
     setWidgets(widgetGroups);    
   }, [])
+
+  const extractDrawables = (dict: Map<string, Drawable>): Drawable[] => {
+    if(!dict) return [];
+    const draws: Drawable[] = [];
+    dict.forEach((d: Drawable) => draws.push(d));
+    return draws;
+  }
 
   return (
   <>
@@ -134,11 +89,7 @@ export default (): JSX.Element => {
       {widgets}
     </section>
     <div id='display'>
-      <Canvas 
-        drawables={drawables} 
-        size={cardDimensions} 
-        setRedrawInParent={getRedrawFromChild}
-      />
+      <Canvas drawables={extractDrawables(drawables)} size={cardDimensions} />
     </div>
   </>
 )};

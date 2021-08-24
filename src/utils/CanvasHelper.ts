@@ -142,10 +142,7 @@ class CardDrawer {
         continue;
       }
 
-<<<<<<< HEAD
-=======
       // Actually draw the card
->>>>>>> b62d9667e0ae752e2042713f8b38f2c64132a8c5
       ctx.fillText(cards[i].text, xPos, yPos);
     }
   }
