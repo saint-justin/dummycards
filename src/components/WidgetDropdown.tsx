@@ -1,6 +1,7 @@
+import { update } from 'lodash';
 import * as React from 'react';
-import { useState } from 'react';
-import { Size, DrawableProperty, WInput } from '../types' 
+import { useState, useEffect } from 'react';
+import { DrawableProperty, WInput } from '../types' 
 
 type WidgetDropdown = {
   name: string,
@@ -31,7 +32,6 @@ export default (props:WidgetDropdown): React.ReactElement  => {
     }
     const target = e.target as HTMLInputElement;
     setValue(target.value);
-    props.action({value: target.value, property: widgetProperty});
   }
 
   // Event for handling select changes
@@ -50,13 +50,19 @@ export default (props:WidgetDropdown): React.ReactElement  => {
       setWidgetProperty('left');
       return;
     } else if (target.value === 'top' || target.value === 'bottom' || target.value === 'left' || target.value === 'right'){
-      if(value === 'centered') setValue(lastValue);
+      if (value === 'centered') setValue(lastValue);
       setWidgetProperty(target.value);
     } else {
       console.error('Error: Illegal widget property set in dropdown');
       return;
     }
   }
+
+  // Updates parent given a value or widgetprop change
+  useEffect(() => {
+    if (!props.action) return;
+    props.action({ value: value?.toString() || '', property: widgetProperty })
+  }, [value, widgetProperty])
 
   return (
     <>

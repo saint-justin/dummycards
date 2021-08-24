@@ -34,7 +34,6 @@ export default (props:WidgetInput): React.ReactElement  => {
       console.error('Error: No function is assigned to button clicked');
       return;
     }
-    // props.action();
   }
 
   // Watch the state of Value and update parent w/ any changes to it

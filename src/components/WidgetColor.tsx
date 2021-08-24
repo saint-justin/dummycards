@@ -13,7 +13,6 @@ type WidgetDropdown = {
 
 export default (props:WidgetDropdown): React.ReactElement  => {
   const [value, setValue] = useState(props.value);
-  const [centerSelected, setCenterSelected] = useState<boolean>(false);
 
   // Helper fxn to clean names for use as ID's
   const cleanName = (str: string): string => `entry_ ${str.replaceAll(' ', '_').toLowerCase()}`;
@@ -39,9 +38,8 @@ export default (props:WidgetDropdown): React.ReactElement  => {
         type={props.type}
         value={value}
         onChange={inputChange}
-        ref={inputRef}
-        disabled={centerSelected}>
-      </input>
+        ref={inputRef} 
+      > </input>
     </>
   )
 }

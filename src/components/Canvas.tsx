@@ -64,36 +64,23 @@ const Canvas = (props: Canvas): JSX.Element => {
 
     // Set canvas to fill 100% and run the first draw
     const canvas = canvasRef.current;
-    const ctx = canvas.getContext('2d');
     canvas.style.width = '100%';
     canvas.style.height = '100%';
 
     // Checking context is real drawing
+    const ctx = canvas.getContext('2d');
     if (!ctx) {
       console.error('ERROR: Canvas Context Null')
       return;
     }
 
-    // Updates card sizing
+    // Updates card sizing & draws
     cardDrawer.updateCardSize(props.size.height, props.size.width);
     draw(ctx);
   }, [props]);
 
-  // Resize the canvas when the window's size gets changed
-  // const redraw = 
-
-  const resizeAndRedraw = (height: number, width: number) => {
-    cardDrawer.updateCardSize(height, width);
-    redraw();
-  }
-
-  // Run-once to allow force redraws from parent
+  // Initializer to add event listeners to the window for resize events
   useEffect(() => {
-    // Sets up the parent redraw function on setup
-    // props.setRedrawInParent(resizeAndRedraw);
-    // console.log('Resize set in parent from canvas!');
-
-    // Event listener to redraw on resize events
     window.addEventListener('resize', redraw);
     return () => window.removeEventListener('resize', redraw);
   }, []);

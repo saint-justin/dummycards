@@ -38,9 +38,12 @@ export default (props: WidgetGroup): JSX.Element => {
 
     const drawableClone = _.cloneDeep(drawable);
     switch(updateInfo.property) {
-      case 'text' || 'fillStyle' || 'font':
+      case 'text':
+      case 'fillStyle':
+      case 'font':
         drawableClone[updateInfo.property] = updateInfo.value;
         setDrawable(drawableClone);
+        console.log('Setting ' + updateInfo.property)
         return;
         
       case 'textAlign':
@@ -54,7 +57,10 @@ export default (props: WidgetGroup): JSX.Element => {
         setDrawable(drawableClone);
         return;
 
-      case 'top'|| 'bottom' || 'left' || 'right':
+      case 'top': 
+      case 'bottom': 
+      case 'left': 
+      case 'right':
         if (Number.isInteger(parseInt(updateInfo.value))) {
           drawableClone.position[updateInfo.property] = parseInt(updateInfo.value);
         } else if (updateInfo.value === 'center' || updateInfo.value === 'none') {
@@ -82,18 +88,6 @@ export default (props: WidgetGroup): JSX.Element => {
       return elementClone;
     })
   }
-
-  // One-time initialization, setting up the basic values for the below inputs
-  useEffect(() => {
-    if (props.widgetInputSet) {
-      props.widgetInputSet.forEach((element:JSX.Element) => {
-        if (element.props.name === 'Horizontal Alignment') drawable.position.left = parseInt(element.props.value) || element.props.value;
-        if (element.props.name === 'Vertical Alignment') drawable.position.top = parseInt(element.props.value) || element.props.value;
-        if (element.props.name === 'Color') drawable.fillStyle = element.props.value;
-        if (element.props.name === 'Placeholder Testing Text') drawable.text = element.props.value || 'No text found';
-      })
-    }
-  }, []);
 
   // The actual JSX to be returned
   return (
