@@ -1,19 +1,18 @@
 import * as React from 'react';
 import * as _ from 'lodash';
 import { useEffect, useState } from 'react';
-import { Drawable, DrawableCallback, WInput } from '../types';
+import { Drawable, WInput } from '../types';
 import './WidgetGroup.scss'
 
 type WidgetGroup = {
   name: string,
   widgetInputSet: JSX.Element[] | undefined,
   drawable: boolean,
-  index: number,
   drawableChanged: (d: Drawable, id: string) => void,
 };
 
 export default (props: WidgetGroup): JSX.Element => {
-  // Default drawable object that gets passed up to parent and over to canvas
+  // Generate an id and base drawable object
   const [id] = useState<string>(`name_${Date.now()}`);
   const [drawable, setDrawable] = useState<Drawable>({
     text: '',
@@ -29,12 +28,14 @@ export default (props: WidgetGroup): JSX.Element => {
 
   // Push updates to drawables into app.tsx
   useEffect(() => {
-    console.log('ID: ' + id);
     props.drawableChanged(drawable, id);
   }, [drawable])
 
   // Defines what the widget should do any time we're trying to update internal drawable info
   const widgetActionDefault = (updateInfo: WInput): void => {
+    console.log('Widget action logged...');
+    console.log(updateInfo);
+
     const drawableClone = _.cloneDeep(drawable);
     switch(updateInfo.property) {
       case 'text' || 'fillStyle' || 'font':
@@ -53,7 +54,7 @@ export default (props: WidgetGroup): JSX.Element => {
         setDrawable(drawableClone);
         return;
 
-      case 'top'|| 'bottom' ||'left' || 'right':
+      case 'top'|| 'bottom' || 'left' || 'right':
         if (Number.isInteger(parseInt(updateInfo.value))) {
           drawableClone.position[updateInfo.property] = parseInt(updateInfo.value);
         } else if (updateInfo.value === 'center' || updateInfo.value === 'none') {

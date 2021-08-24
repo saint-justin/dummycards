@@ -15,7 +15,7 @@ export default (): JSX.Element => {
   const [widgets, setWidgets] = useState<JSX.Element[] | undefined>(undefined);
   const [drawables, setDrawables] = useState<Map<string, Drawable>>(new Map<string, Drawable>());
 
-  // Updater function to update card dimensions one at a time
+  // Updater functions to update card dimensions one at a time
   const updateOneDimension = (s: string | void, which: 'height' | 'width'): void => {
     if(!s) {
       console.error('Value passed to update card dimensions is not a string');
@@ -35,6 +35,14 @@ export default (): JSX.Element => {
     setDrawables(clone);
   }
 
+  // Function to extract the drawable objects from drawables dict
+  const extractDrawables = (dict: Map<string, Drawable>): Drawable[] => {
+    if(!dict) return [];
+    const draws: Drawable[] = [];
+    dict.forEach((d: Drawable) => draws.push(d));
+    return draws;
+  }
+
   // Run-once initialization
   useEffect(() => {
     // Array to hold all widget groups
@@ -49,7 +57,6 @@ export default (): JSX.Element => {
       drawable={false} 
       name='Card Dimensions' 
       widgetInputSet={dimensionInputs}
-      index={0}
       key={0}
       drawableChanged={updateDrawableFromWidgetGroup}
     ></WidgetGroup>
@@ -66,7 +73,6 @@ export default (): JSX.Element => {
       drawable={true} 
       name='Text Input' 
       widgetInputSet={testTextInputs}
-      index={1}
       key={1}
       drawableChanged={updateDrawableFromWidgetGroup}
       ></WidgetGroup>
@@ -75,13 +81,6 @@ export default (): JSX.Element => {
     // Set our collection of widgets into state
     setWidgets(widgetGroups);    
   }, [])
-
-  const extractDrawables = (dict: Map<string, Drawable>): Drawable[] => {
-    if(!dict) return [];
-    const draws: Drawable[] = [];
-    dict.forEach((d: Drawable) => draws.push(d));
-    return draws;
-  }
 
   return (
   <>

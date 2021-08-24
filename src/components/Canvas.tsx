@@ -56,8 +56,6 @@ const Canvas = (props: Canvas): JSX.Element => {
 
   // Set up the canvas w/ info needed for drawing
   useEffect(() => {
-    console.log('useEffect triggered in canvas...')
-
     // Check canvas is real
     if(!canvasRef.current) {
       console.error('ERROR: Canvas Reference Null')
@@ -79,7 +77,7 @@ const Canvas = (props: Canvas): JSX.Element => {
     // Updates card sizing
     cardDrawer.updateCardSize(props.size.height, props.size.width);
     draw(ctx);
-  });
+  }, [props]);
 
   // Resize the canvas when the window's size gets changed
   // const redraw = 
