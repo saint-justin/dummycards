@@ -1,70 +1,84 @@
 import * as React from 'react';
-import { useState , useEffect } from 'react';
-import { DrawableProperty, WInput } from '../types' 
+import { useState, useEffect } from 'react';
+import * as helper from '../utils/Helpers';
+import { DrawableProperty, WInput } from '../types';
 
-type WidgetInput = {
+type WInputProps = {
   name: string,
   property: DrawableProperty,
   placeholder?: string,
-  value?: string | number,
+  defaultValue?: string | number,
   type?: string,
   action?: ((updateInfo: WInput) => void),
-}
+};
 
-export default (props:WidgetInput): React.ReactElement  => {
-  const [value, setValue] = useState(props.value);
+const WidgetInput = (props: WInputProps): React.ReactElement => {
+  const {
+    name, property, placeholder, defaultValue, type, action,
+  } = props;
+  const [value, setValue] = useState(defaultValue);
   const inputRef = React.createRef<HTMLInputElement>();
 
-  // Helper fxn to clean names for use as ID's
-  const cleanName = (str: string): string => `entry_ ${str.replaceAll(' ', '_').toLowerCase()}`;
-
   // Change Event input handler
-  const inputChange = (e:React.ChangeEvent<HTMLInputElement>) => { 
-    if (!props.action || !e) {
+  const inputChange = (e:React.ChangeEvent<HTMLInputElement>) => {
+    if (!action || !e) {
       console.error('Error: No onchange function given for component');
       return;
     }
     const target = e.target as HTMLInputElement;
     setValue(target.value);
-  }
+  };
 
   // Event handler for button being clicked
   const buttonClicked = ():void => {
-    if (!props.action) {
+    if (!action) {
       console.error('Error: No function is assigned to button clicked');
-      return;
     }
-  }
+  };
 
   // Watch the state of Value and update parent w/ any changes to it
   useEffect(() => {
-    if (value === undefined || !props.action) {
-      console.error('Error: Unable to update widget\'s value in because widget\'s value or props.action is undefined.');
+    if (value === undefined || !action) {
+      console.error('Error: Unable to update widget\'s value in because widget\'s value or action is undefined.');
       return;
     }
-    props.action({ value: value.toString(), property: props.property});
+    action({ value: value.toString(), property });
   }, [value]);
 
   return (
     <>
       {/* Disable labels for buttons */}
-      { props.type !== 'button' && <label>{props.name}</label>}
+      { type !== 'button' && <label htmlFor={helper.default.cleanString(name)}>{name}</label>}
       {/* If this is assigned to be a button, make it a button. If not, it's a generic input */}
-      { props.type === 'button' ?
-        <button 
-          id={cleanName(props.name)}
-          onClick={buttonClicked}
-        >{props.name}</button>
-        :
-        <input 
-          placeholder={props.placeholder}
-          id={cleanName(props.name)}
-          type={props.type}
-          value={value}
-          onChange={inputChange}
-          ref={inputRef}
-        ></input>
-        }
+      { type === 'button'
+        ? (
+          <button
+            type="submit"
+            id={helper.default.cleanString(name)}
+            onClick={buttonClicked}
+          >
+            {name}
+          </button>
+        )
+        : (
+          <input
+            placeholder={placeholder}
+            id={helper.default.cleanString(name)}
+            type={type}
+            value={value}
+            onChange={inputChange}
+            ref={inputRef}
+          />
+        )}
     </>
-  )
-}
+  );
+};
+
+WidgetInput.defaultProps = {
+  placeholder: 'info goes here',
+  defaultValue: undefined,
+  type: undefined,
+  action: undefined,
+};
+
+export default WidgetInput;

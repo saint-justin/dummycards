@@ -1,12 +1,14 @@
-import { ApolloClient, InMemoryCache, gql,  NormalizedCacheObject } from "@apollo/client";
+import {
+  ApolloClient, InMemoryCache, gql, NormalizedCacheObject,
+} from '@apollo/client';
 
 const client:ApolloClient<NormalizedCacheObject> = new ApolloClient({
   uri: 'http://localhost:4000',
-  cache: new InMemoryCache()
+  cache: new InMemoryCache(),
 });
 
 const TestQuery = async (): Promise<void> => {
-  console.log('Started test...')
+  console.log('Started test...');
   const response = await client.query({
     query: gql`
       query ExampleQuery {
@@ -15,11 +17,11 @@ const TestQuery = async (): Promise<void> => {
           title
         }
       }
-    `
+    `,
   });
 
   console.log('Result:');
   console.log(response);
-}
+};
 
 module.exports = TestQuery;

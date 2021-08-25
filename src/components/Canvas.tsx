@@ -4,21 +4,21 @@ import CardDrawer from '../utils/CanvasHelper';
 import { Drawable, Size } from '../types';
 
 // Canvas's type
-type Canvas = {
-  size: Size // Size of the card component (height/width)
+type CanvasProps = {
+  size: Size, // Size of the card component (height/width)
   drawables?: Drawable[], // List of all the components to be draw to the card
-  // setRedrawInParent:  (child: (height: number, width: number) => void) => void // Fxn to give parent a way to force a redraw
-}
+};
 
 // Component to create and draw to the canvas
-const Canvas = (props: Canvas): JSX.Element => {
+const Canvas = ({ size, drawables = [] } : CanvasProps): JSX.Element => {
   const canvasRef: React.RefObject<HTMLCanvasElement> = useRef(null);
   const cardDrawer = new CardDrawer();
+  // const { size, drawables } = props;
 
   // Actually draws onto the canvas
   const draw = (ctx: CanvasRenderingContext2D) => {
-    if(!canvasRef.current) {
-      console.error('ERR: Canvas Element Null')
+    if (!canvasRef.current) {
+      console.error('ERR: Canvas Element Null');
       return;
     }
 
@@ -34,7 +34,7 @@ const Canvas = (props: Canvas): JSX.Element => {
 
     // Draws main card components
     cardDrawer.drawCardBase(ctx);
-    cardDrawer.drawCardComponents(ctx, props.drawables || []);
+    cardDrawer.drawCardComponents(ctx, drawables || []);
 
     // Debug outputs for sizing
     ctx.fillStyle = 'tomato';
@@ -48,17 +48,17 @@ const Canvas = (props: Canvas): JSX.Element => {
   const redraw = () => {
     const ctx = canvasRef.current?.getContext('2d');
     if (!ctx) {
-      console.error('ERROR: Canvas Context Null')
+      console.error('ERROR: Canvas Context Null');
       return;
     }
     draw(ctx);
-  }
+  };
 
   // Set up the canvas w/ info needed for drawing
   useEffect(() => {
     // Check canvas is real
-    if(!canvasRef.current) {
-      console.error('ERROR: Canvas Reference Null')
+    if (!canvasRef.current) {
+      console.error('ERROR: Canvas Reference Null');
       return;
     }
 
@@ -70,14 +70,14 @@ const Canvas = (props: Canvas): JSX.Element => {
     // Checking context is real drawing
     const ctx = canvas.getContext('2d');
     if (!ctx) {
-      console.error('ERROR: Canvas Context Null')
+      console.error('ERROR: Canvas Context Null');
       return;
     }
 
     // Updates card sizing & draws
-    cardDrawer.updateCardSize(props.size.height, props.size.width);
+    cardDrawer.updateCardSize(size.height, size.width);
     draw(ctx);
-  }, [props]);
+  }, [size, drawables]);
 
   // Initializer to add event listeners to the window for resize events
   useEffect(() => {
@@ -85,7 +85,12 @@ const Canvas = (props: Canvas): JSX.Element => {
     return () => window.removeEventListener('resize', redraw);
   }, []);
 
-  return <canvas ref={canvasRef} data-refresh={props.size} />;
+  return <canvas ref={canvasRef} data-refresh={size} />;
+};
+
+// Appending default props for optional properties
+Canvas.defaultProps = {
+  drawables: [],
 };
 
 export default Canvas;

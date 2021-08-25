@@ -2,16 +2,17 @@ import * as React from 'react';
 import * as _ from 'lodash';
 import { useEffect, useState } from 'react';
 import { Drawable, WInput } from '../types';
-import './WidgetGroup.scss'
+import './WidgetGroup.scss';
 
 type WidgetGroup = {
+  // eslint-disable-next-line react/no-unused-prop-types
+  drawable: boolean, // Used in app.tsx
+  drawableChanged: (d: Drawable, id: string) => void,
   name: string,
   widgetInputSet: JSX.Element[] | undefined,
-  drawable: boolean,
-  drawableChanged: (d: Drawable, id: string) => void,
 };
 
-export default (props: WidgetGroup): JSX.Element => {
+export default ({ name, widgetInputSet, drawableChanged }: WidgetGroup): JSX.Element => {
   // Generate an id and base drawable object
   const [id] = useState<string>(`name_${Date.now()}`);
   const [drawable, setDrawable] = useState<Drawable>({
@@ -28,10 +29,10 @@ export default (props: WidgetGroup): JSX.Element => {
 
   // Push updates to drawables into app.tsx
   useEffect(() => {
-    props.drawableChanged(drawable, id);
-    console.log('Drawable updated:')
+    drawableChanged(drawable, id);
+    console.log('Drawable updated:');
     console.log(drawable);
-  }, [drawable])
+  }, [drawable]);
 
   // Defines what the widget should do any time we're trying to update internal drawable info
   const adjustDrawableFromWidget = (updateInfo: WInput): void => {
@@ -39,32 +40,32 @@ export default (props: WidgetGroup): JSX.Element => {
     console.log(updateInfo);
 
     const drawableClone = _.cloneDeep(drawable);
-    switch(updateInfo.property) {
+    switch (updateInfo.property) {
       case 'text':
       case 'fillStyle':
       case 'font':
         drawableClone[updateInfo.property] = updateInfo.value;
         setDrawable(drawableClone);
-        console.log('Setting ' + updateInfo.property)
+        console.log(`Setting ${updateInfo.property}`);
         return;
-        
+
       case 'textAlign':
         console.log('updateInfo');
         console.log(updateInfo);
         if (updateInfo.value !== 'left' && updateInfo.value !== 'right' && updateInfo.value !== 'center') {
           console.error(`Error: Tried setting drawable property 'textAlign' to illegal value (${updateInfo.value})`);
           return;
-        } 
+        }
         drawableClone[updateInfo.property] = updateInfo.value;
         setDrawable(drawableClone);
         return;
 
-      case 'top': 
-      case 'bottom': 
-      case 'left': 
+      case 'top':
+      case 'bottom':
+      case 'left':
       case 'right':
-        if (Number.isInteger(parseInt(updateInfo.value))) {
-          drawableClone.position[updateInfo.property] = parseInt(updateInfo.value);
+        if (Number.isInteger(parseInt(updateInfo.value, 10))) {
+          drawableClone.position[updateInfo.property] = parseInt(updateInfo.value, 10);
         } else if (updateInfo.value === 'center' || updateInfo.value === 'none') {
           drawableClone.position[updateInfo.property] = updateInfo.value;
         } else {
@@ -73,13 +74,16 @@ export default (props: WidgetGroup): JSX.Element => {
         }
         setDrawable(drawableClone);
         return;
+
+      default:
+        console.error(`Error: Invalid widget property on widget action (${updateInfo.property})`);
     }
-  }
+  };
 
   // Checks if a given element has an 'action' prop and appends one if it doesn't
   const appendActions = (arr: JSX.Element[] | undefined): JSX.Element[] => {
     if (!arr) return [];
-    
+
     return arr.map((element: JSX.Element) => {
       // Element has action, don't touch it
       if (element.props.action) return element;
@@ -88,14 +92,14 @@ export default (props: WidgetGroup): JSX.Element => {
       const elementClone = _.cloneDeep(element);
       elementClone.props.action = adjustDrawableFromWidget;
       return elementClone;
-    })
-  }
+    });
+  };
 
   // The actual JSX to be returned
   return (
-    <div className='widget-group'>
-      <h3>{ props.name }</h3>
-      { appendActions(props.widgetInputSet) }
+    <div className="widget-group">
+      <h3>{ name }</h3>
+      { appendActions(widgetInputSet) }
     </div>
-  )
-}
+  );
+};
