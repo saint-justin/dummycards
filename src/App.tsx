@@ -64,10 +64,11 @@ export default (): JSX.Element => {
 
     // Creating a second widget to allow users to submit info to be displayed
     const testTextInputs = [];
-    testTextInputs.push(<WidgetInput name='Placeholder Testing Text' value='placeholder_name' key='test_text' property='text'></WidgetInput>)
-    testTextInputs.push(<WidgetDropdown name='Horizontal Alignment' value='10' key='test_dropdown_h' options={['Left', 'Right', 'Center']} initialProperty='left'></WidgetDropdown>)
-    testTextInputs.push(<WidgetDropdown name='Vertical Alignment' value='10' key='test_dropdown_v' options={['Top', 'Bottom', 'Center']} initialProperty='top'></WidgetDropdown>)
-    testTextInputs.push(<WidgetInput type='color' name='Color' value='#00FF00' key='test_color' property='fillStyle'></WidgetInput>)
+    testTextInputs.push(<WidgetInput name='Placeholder Testing Text' value='placeholder_name' key='test_text' property='text'></WidgetInput>);
+    testTextInputs.push(<WidgetDropdown name='Text Align' value='left' key='test_dropdown_text' options={['Left', 'Center', 'Right']} initialProperty='textAlign'></WidgetDropdown>);
+    testTextInputs.push(<WidgetDropdown name='Horizontal Alignment' value='10' key='test_dropdown_ha' options={['Left', 'Center', 'Right']} initialProperty='left' input={true}></WidgetDropdown>);
+    testTextInputs.push(<WidgetDropdown name='Vertical Alignment' value='10' key='test_dropdown_va' options={['Top', 'Center', 'Bottom']} initialProperty='top' input={true}></WidgetDropdown>);
+    testTextInputs.push(<WidgetInput type='color' name='Color' value='#000000' key='test_color' property='fillStyle'></WidgetInput>);
     widgetGroups.push(
     <WidgetGroup 
       drawable={true} 

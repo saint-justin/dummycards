@@ -49,6 +49,7 @@ export default (props:WidgetInput): React.ReactElement  => {
     <>
       {/* Disable labels for buttons */}
       { props.type !== 'button' && <label>{props.name}</label>}
+      {/* If this is assigned to be a button, make it a button. If not, it's a generic input */}
       { props.type === 'button' ?
         <button 
           id={cleanName(props.name)}

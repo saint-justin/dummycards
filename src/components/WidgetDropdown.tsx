@@ -10,13 +10,14 @@ type WidgetDropdown = {
   placeholder?: string,
   value?: string | number,
   type?: string,
+  input? : boolean,
   action?: ((input: WInput) => void),
 }
 
 export default (props:WidgetDropdown): React.ReactElement  => {
+  const [widgetProperty, setWidgetProperty] = useState<DrawableProperty>(props.initialProperty);
   const [value, setValue] = useState(props.value);
   const [lastValue, setLastValue] = useState(props.value);
-  const [widgetProperty, setWidgetProperty] = useState<DrawableProperty>(props.initialProperty);
   const inputRef = React.createRef<HTMLInputElement>();
   const selectRef = React.createRef<HTMLSelectElement>();
 
@@ -42,15 +43,21 @@ export default (props:WidgetDropdown): React.ReactElement  => {
       return;
     }
 
+    // Handling for strict dropdowns
+    if (!props.input) {
+      setValue(e.target.value);
+      return;
+    }
+
     // Slot valid values into the widget property or error out for illegal ones
     const target = e.target as HTMLSelectElement;
     if (target.value === 'center') { 
       if (value !== undefined) setLastValue(value.toString());
-      setValue('centered');
+      setValue('');
       setWidgetProperty('left');
       return;
     } else if (target.value === 'top' || target.value === 'bottom' || target.value === 'left' || target.value === 'right'){
-      if (value === 'centered') setValue(lastValue);
+      if (value === 'center') setValue(lastValue);
       setWidgetProperty(target.value);
     } else {
       console.error('Error: Illegal widget property set in dropdown');
@@ -68,9 +75,16 @@ export default (props:WidgetDropdown): React.ReactElement  => {
     <>
       <label>{props.name}</label>
       <div className='flex-row'>
-        <select id={'select_' + cleanName(props.name)} onChange={handleSelectChange} ref={selectRef}>
+        <select 
+          id={'select_' + cleanName(props.name)} 
+          onChange={handleSelectChange} 
+          ref={selectRef} 
+          defaultValue={props.value}
+          className={!props.input ? 'spread' : ''}>
           {generateOptions(props.options)}
         </select>
+        {/* Only display the input section if needed */}
+        { props.input && 
         <input
           placeholder={props.placeholder}
           id={'input_' + cleanName(props.name)}
@@ -78,8 +92,8 @@ export default (props:WidgetDropdown): React.ReactElement  => {
           value={value}
           onChange={inputChange}
           ref={inputRef}
-          disabled={value === 'centered'}>
-        </input>
+          disabled={value === 'center'}>
+        </input>}
       </div>
     </>
   )

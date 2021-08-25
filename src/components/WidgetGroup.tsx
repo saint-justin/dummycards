@@ -15,13 +15,13 @@ export default (props: WidgetGroup): JSX.Element => {
   // Generate an id and base drawable object
   const [id] = useState<string>(`name_${Date.now()}`);
   const [drawable, setDrawable] = useState<Drawable>({
-    text: '',
+    text: 'placeholder_name',
     fillStyle: '#000000',
     textAlign: 'left',
     position: {
-      left: 'center',
+      left: 10,
       right: 'none',
-      top: 'center',
+      top: 10,
       bottom: 'none',
     },
   });
@@ -29,10 +29,12 @@ export default (props: WidgetGroup): JSX.Element => {
   // Push updates to drawables into app.tsx
   useEffect(() => {
     props.drawableChanged(drawable, id);
+    console.log('Drawable updated:')
+    console.log(drawable);
   }, [drawable])
 
   // Defines what the widget should do any time we're trying to update internal drawable info
-  const widgetActionDefault = (updateInfo: WInput): void => {
+  const adjustDrawableFromWidget = (updateInfo: WInput): void => {
     console.log('Widget action logged...');
     console.log(updateInfo);
 
@@ -82,9 +84,9 @@ export default (props: WidgetGroup): JSX.Element => {
       // Element has action, don't touch it
       if (element.props.action) return element;
 
-      // Element doesn't have an action, append widgetActionDefault
+      // Element doesn't have an action, append adjustDrawableFromWidget
       const elementClone = _.cloneDeep(element);
-      elementClone.props.action = widgetActionDefault;
+      elementClone.props.action = adjustDrawableFromWidget;
       return elementClone;
     })
   }

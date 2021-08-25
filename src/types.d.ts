@@ -1,7 +1,8 @@
 // Element drawn onto the canvas's type
+export type TextAlignOpt = 'left' | 'center' | 'right';
 export type Drawable = {
   text: string
-  textAlign: 'left' | 'center' | 'right',
+  textAlign: TextAlignOpt,
   fillStyle?: string,
   font?: string,
   position: {
