@@ -37,12 +37,18 @@ class CardDrawer {
 
   // Setter for card sizes
   updateCardSize(cardHeight: number, cardWidth: number): void {
+    if (cardHeight < 1 || cardWidth < 1) {
+      throw new Error('ERROR: Card size must be positive');
+    }
     this.card.height = cardHeight;
     this.card.width = cardWidth;
   }
 
   // Setter for canvas sizes
   updateCanvasSize(canvas: HTMLCanvasElement): void {
+    if (canvas.width < 1 || canvas.height < 1) {
+      throw new Error('ERROR: Canvas size must be at least 1x1');
+    }
     this.canvas.width = canvas.width;
     this.canvas.height = canvas.height;
   }
@@ -50,9 +56,10 @@ class CardDrawer {
   // Fxn to draw the basic card to the canvas
   drawCardBase(ctx: CanvasRenderingContext2D): void {
     // Check all values used exist
-    if (!this.card.height || !this.card.width || !this.canvas.height || !this.canvas.width) {
-      console.error('ERROR: Tried to draw card base with missing values');
-      return;
+    if (!this.card.height || !this.card.width) {
+      throw new Error('ERROR: Tried to draw card base with missing card size values');
+    } else if (!this.canvas.height || !this.canvas.width) {
+      throw new Error('ERROR: Tried to draw card base with missing canvas size values');
     }
 
     // Get a scalar to fit the card in frame
@@ -83,16 +90,20 @@ class CardDrawer {
   // Actually try to draw the card components
   drawCardComponents(ctx: CanvasRenderingContext2D, cards: Drawable[]): void {
     // Checking to make sure values used will exist
-    if (!this.card.width
-      || !this.card.height
-      || !this.card.sides.left
+    if (!this.card.width || !this.card.height || this.card.width < 1 || this.card.height < 1) {
+      throw new Error('ERROR: Tried to draw card components with invalid card measures');
+    }
+
+    if (!this.card.sides.left
       || !this.card.sides.right
       || !this.card.sides.top
-      || !this.card.sides.bottom
-      || !this.canvas.height
-      || !this.canvas.width) {
-      console.error('ERROR: Tried to draw card components with invalid measures');
-      return;
+      || !this.card.sides.bottom) {
+      throw new Error('ERROR: Tried to draw card components with invalid card sides');
+    }
+
+    if (!this.canvas.height || !this.canvas.width
+      || this.canvas.height < 1 || this.canvas.width < 1) {
+      throw new Error('ERROR: Tried to draw card components with invalid canvas measures');
     }
 
     // Draw out all chunks of text onto the canvas
