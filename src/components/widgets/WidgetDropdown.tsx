@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import { DrawableProperty, WInput } from '../types';
+import { DrawableProperty, WInput } from '../../types';
 
 type WDropdownProps = {
   name: string,

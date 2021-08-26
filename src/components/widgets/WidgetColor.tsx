@@ -1,6 +1,6 @@
 import * as React from 'react';
 import { useState } from 'react';
-import { WInput } from '../types';
+import { WInput } from '../../types';
 
 type WDropdownProps = {
   name: string,

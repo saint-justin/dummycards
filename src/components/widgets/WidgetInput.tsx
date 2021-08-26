@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
-import * as helper from '../utils/Helpers';
-import { DrawableProperty, WInput } from '../types';
+import * as helper from '../../utils/Helpers';
+import { DrawableProperty, WInput } from '../../types';
 
 type WInputProps = {
   name: string,

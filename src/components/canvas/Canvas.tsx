@@ -1,7 +1,7 @@
 import * as React from 'react';
 import { useRef, useEffect } from 'react';
-import CardDrawer from '../utils/CanvasHelper';
-import { Drawable, Size } from '../types';
+import CardDrawer from './CardDrawer';
+import { Drawable, Size } from '../../types';
 
 // Canvas's type
 type CanvasProps = {
