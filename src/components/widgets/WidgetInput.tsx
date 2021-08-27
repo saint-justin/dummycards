@@ -6,6 +6,8 @@ import { DrawableProperty, WInput } from '../../types';
 type WInputProps = {
   name: string,
   property: DrawableProperty,
+  type?: string,
+  labeled?: boolean,
   placeholder?: string,
   defaultValue?: string | number,
   action?: ((updateInfo: WInput) => void),
@@ -13,7 +15,7 @@ type WInputProps = {
 
 const WidgetInput = (props: WInputProps): React.ReactElement => {
   const {
-    name, property, placeholder, defaultValue, action,
+    name, property, type, labeled, placeholder, defaultValue, action,
   } = props;
   const [value, setValue] = useState(defaultValue);
   const inputRef = React.createRef<HTMLInputElement>();
@@ -39,11 +41,12 @@ const WidgetInput = (props: WInputProps): React.ReactElement => {
 
   return (
     <>
-      <label htmlFor={helper.default.cleanString(name)}>{name}</label>
+      {labeled && <label htmlFor={helper.default.cleanString(name)}>{name}</label>}
       <input
         placeholder={placeholder}
         id={helper.default.cleanString(name)}
         value={value}
+        type={type}
         onChange={inputChange}
         ref={inputRef}
       />
@@ -55,6 +58,8 @@ WidgetInput.defaultProps = {
   placeholder: 'info goes here',
   defaultValue: undefined,
   action: undefined,
+  labeled: true,
+  type: 'text',
 };
 
 export default WidgetInput;

@@ -1,16 +1,23 @@
-// Element drawn onto the canvas's type
+// All allowable text align options
 export type TextAlignOpt = 'left' | 'center' | 'right';
+export type RelativePositionTypes = 'start' | 'end' | 'center';
+export type AlignmentType = 'vertical' | 'horizontal' | 'other';
+
+// Generic type to fit into position
+export type RelativePosition = {
+  top: 'center' | 'none' | number,
+  bottom: 'none' | number,
+  left: 'center' | 'none' | number,
+  right: 'none' | number,
+};
+
+// Element drawn onto the canvas's type
 export type Drawable = {
   text: string
   textAlign: TextAlignOpt,
   fillStyle?: string,
   font?: string,
-  position: {
-    top: 'center' | 'none' | number,
-    bottom: 'center' | 'none' | number,
-    left: 'center' | 'none' | number,
-    right: 'center' | 'none' | number,
-  }
+  position: RelativePosition,
 };
 
 // Info that each card holds and prints

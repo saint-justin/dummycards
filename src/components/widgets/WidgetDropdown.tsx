@@ -1,55 +1,36 @@
 import * as React from 'react';
-import { useState, useEffect } from 'react';
-import { DrawableProperty, WInput } from '../../types';
+import { useState } from 'react';
+import { RelativePositionTypes, AlignmentType } from '../../types';
+import helper from '../../utils/Helpers';
 
 type WDropdownProps = {
   name: string,
   options: string[],
-  initialProperty: DrawableProperty,
-  defaultValue: string | number,
-  placeholder?: string,
-  type?: string,
-  isInput? : boolean,
-  action?: ((input: WInput) => void),
+  initialProperty: RelativePositionTypes,
+  alignmentType: AlignmentType,
+  action?: ((at: AlignmentType, rpt: RelativePositionTypes) => void),
 };
 
-const WidgetDropdown = (props: WDropdownProps): React.ReactElement => {
+const WidgetDropdown = (props: WDropdownProps): JSX.Element => {
   // Obj destructuring
   const {
     name,
     options,
     initialProperty,
-    placeholder,
-    defaultValue,
-    type,
-    isInput,
+    alignmentType,
     action,
   } = props;
 
   // Initial states
-  const [widgetProperty, setWidgetProperty] = useState<DrawableProperty>(initialProperty);
-  const [value, setValue] = useState(placeholder || defaultValue);
-  const [lastValue, setLastValue] = useState(defaultValue);
+  const [positionType, setPositionType] = useState<RelativePositionTypes>(initialProperty);
 
   // Refs to input and select elements
-  const inputRef = React.createRef<HTMLInputElement>();
   const selectRef = React.createRef<HTMLSelectElement>();
 
   // Helper fxns to clean names and generate option boxes from strings
-  const cleanName = (str: string): string => `entry_ ${str.replace(/\s/g, '_').toLowerCase()}`;
   const generateOptions = (opts: string[]) => opts.map(
     (s: string): JSX.Element => <option value={s.toLowerCase()} key={s}>{s}</option>,
   );
-
-  // Event for handling input changes
-  const inputChange = (e:React.ChangeEvent<HTMLInputElement>) => {
-    if (!action || !e) {
-      console.error('Error: No onchange function given for component');
-      return;
-    }
-    const target = e.target as HTMLInputElement;
-    setValue(target.value);
-  };
 
   // Event for handling select changes
   const handleSelectChange = (e:React.ChangeEvent<HTMLSelectElement>) => {
@@ -59,66 +40,33 @@ const WidgetDropdown = (props: WDropdownProps): React.ReactElement => {
       return;
     }
 
-    // Handling for strict dropdowns
-    if (!isInput) {
-      setValue(e.target.value);
-      return;
-    }
+    if (['start', 'end', 'center'].includes(e.target.value)) {
+      const newValue = e.target.value as RelativePositionTypes;
+      setPositionType(newValue);
 
-    // Slot valid values into the widget property or error out for illegal ones
-    const target = e.target as HTMLSelectElement;
-    if (target.value === 'center') {
-      if (value !== undefined) setLastValue(value.toString());
-      setValue('');
-      setWidgetProperty('left');
-    } else if (target.value === 'top' || target.value === 'bottom' || target.value === 'left' || target.value === 'right') {
-      if (value === 'center') setValue(lastValue?.toString());
-      setWidgetProperty(target.value);
-    } else {
-      console.error('Error: Illegal widget property set in dropdown');
+      if (!action) return;
+      action(alignmentType, positionType);
     }
   };
 
-  // Updates parent given a value or widgetprop change
-  useEffect(() => {
-    if (!action) return;
-    action({ value: value?.toString() || '', property: widgetProperty });
-  }, [value, widgetProperty]);
-
   return (
     <>
-      <label htmlFor={`select_${cleanName(name)}`}>{name}</label>
-      <div className="flex-row" id={`select_${cleanName(name)}`}>
+      <label htmlFor={`select_${helper.cleanString(name)}`}>{name}</label>
+      <div className="flex-row" id={`select_${helper.cleanString(name)}`}>
         <select
           onChange={handleSelectChange}
           ref={selectRef}
-          defaultValue={value}
-          className={!isInput ? 'spread' : ''}
+          defaultValue={initialProperty}
         >
           {generateOptions(options)}
         </select>
-        {/* Only display the input section if needed */}
-        { isInput
-        && (
-        <input
-          placeholder={placeholder}
-          type={type}
-          value={value}
-          onChange={inputChange}
-          ref={inputRef}
-          disabled={value === 'center'}
-        />
-        )}
       </div>
     </>
   );
 };
 
 WidgetDropdown.defaultProps = {
-  placeholder: undefined,
-  type: undefined,
   action: undefined,
-  isInput: false,
 };
 
 export default WidgetDropdown;
