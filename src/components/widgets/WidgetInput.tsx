@@ -8,13 +8,12 @@ type WInputProps = {
   property: DrawableProperty,
   placeholder?: string,
   defaultValue?: string | number,
-  type?: string,
   action?: ((updateInfo: WInput) => void),
 };
 
 const WidgetInput = (props: WInputProps): React.ReactElement => {
   const {
-    name, property, placeholder, defaultValue, type, action,
+    name, property, placeholder, defaultValue, action,
   } = props;
   const [value, setValue] = useState(defaultValue);
   const inputRef = React.createRef<HTMLInputElement>();
@@ -29,13 +28,6 @@ const WidgetInput = (props: WInputProps): React.ReactElement => {
     setValue(target.value);
   };
 
-  // Event handler for button being clicked
-  const buttonClicked = ():void => {
-    if (!action) {
-      console.error('Error: No function is assigned to button clicked');
-    }
-  };
-
   // Watch the state of Value and update parent w/ any changes to it
   useEffect(() => {
     if (value === undefined || !action) {
@@ -47,29 +39,14 @@ const WidgetInput = (props: WInputProps): React.ReactElement => {
 
   return (
     <>
-      {/* Disable labels for buttons */}
-      { type !== 'button' && <label htmlFor={helper.default.cleanString(name)}>{name}</label>}
-      {/* If this is assigned to be a button, make it a button. If not, it's a generic input */}
-      { type === 'button'
-        ? (
-          <button
-            type="submit"
-            id={helper.default.cleanString(name)}
-            onClick={buttonClicked}
-          >
-            {name}
-          </button>
-        )
-        : (
-          <input
-            placeholder={placeholder}
-            id={helper.default.cleanString(name)}
-            type={type}
-            value={value}
-            onChange={inputChange}
-            ref={inputRef}
-          />
-        )}
+      <label htmlFor={helper.default.cleanString(name)}>{name}</label>
+      <input
+        placeholder={placeholder}
+        id={helper.default.cleanString(name)}
+        value={value}
+        onChange={inputChange}
+        ref={inputRef}
+      />
     </>
   );
 };
@@ -77,7 +54,6 @@ const WidgetInput = (props: WInputProps): React.ReactElement => {
 WidgetInput.defaultProps = {
   placeholder: 'info goes here',
   defaultValue: undefined,
-  type: undefined,
   action: undefined,
 };
 

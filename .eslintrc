@@ -13,6 +13,10 @@
     "airbnb-typescript"
   ],
   "rules": {
-    "no-console": "warn"
+    "no-console": 
+    [
+      "error", 
+      { "allow": ["log", "warn", "error"] }
+    ]
   }
 }

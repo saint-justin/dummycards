@@ -3,10 +3,10 @@ import * as _ from 'lodash';
 import { useState, useEffect } from 'react';
 import { Drawable, Size, WInput } from './types';
 
-import WidgetInput from './components/WidgetInput';
-import WidgetDropdown from './components/WidgetDropdown';
+import WidgetInput from './components/widgets/WidgetInput';
+import WidgetDropdown from './components/widgets/WidgetDropdown';
 import WidgetGroup from './components/WidgetGroup';
-import Canvas from './components/Canvas';
+import Canvas from './components/canvas/Canvas';
 
 import './App.scss';
 
@@ -50,8 +50,8 @@ export default (): JSX.Element => {
 
     // Creating a first widget to house the Card's dimensions
     const dimensionInputs = [];
-    dimensionInputs.push(<WidgetInput type="number" name="Height" value="1125" key="dimensions_height" action={updateHeight} property="text" />);
-    dimensionInputs.push(<WidgetInput type="number" name="Width" value="825" key="dimensions_width" action={updateWidth} property="text" />);
+    dimensionInputs.push(<WidgetInput type="number" name="Height" defaultValue="1125" key="dimensions_height" action={updateHeight} property="text" />);
+    dimensionInputs.push(<WidgetInput type="number" name="Width" defaultValue="825" key="dimensions_width" action={updateWidth} property="text" />);
     widgetGroups.push(
       <WidgetGroup
         drawable={false}
