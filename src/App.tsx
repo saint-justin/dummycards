@@ -3,8 +3,8 @@ import * as _ from 'lodash';
 import { useState, useEffect } from 'react';
 import { Drawable, Size, WInput } from './types';
 
-import WidgetInput from './components/widgets/WidgetInput';
-import WidgetDropdown from './components/widgets/WidgetDropdown';
+import WidgetInput from './components/atoms/Input';
+import WidgetDropdown from './components/atoms/Dropdown';
 import WidgetGroup from './components/WidgetGroup';
 import Canvas from './components/canvas/Canvas';
 
@@ -65,9 +65,9 @@ export default (): JSX.Element => {
     // Creating a second widget to allow users to submit info to be displayed
     const testTextInputs = [];
     testTextInputs.push(<WidgetInput name="Placeholder Testing Text" defaultValue="placeholder_name" key="test_text" property="text" />);
-    testTextInputs.push(<WidgetDropdown name="Text Align" key="test_dropdown_text" options={['Left', 'Center', 'Right']} initialProperty="center" alignmentType="other" />);
-    testTextInputs.push(<WidgetDropdown name="Horizontal Alignment" key="test_dropdown_ha" options={['Left', 'Center', 'Right']} initialProperty="start" alignmentType="horizontal" />);
-    testTextInputs.push(<WidgetDropdown name="Vertical Alignment" key="test_dropdown_va" options={['Top', 'Center', 'Bottom']} initialProperty="start" alignmentType="vertical" />);
+    testTextInputs.push(<WidgetDropdown name="Text Align" key="test_dropdown_text" options={['left', 'center', 'right']} initialProperty="center" alignmentType="other" />);
+    testTextInputs.push(<WidgetDropdown name="Horizontal Alignment" key="test_dropdown_ha" options={['left', 'center', 'right']} initialProperty="start" alignmentType="horizontal" />);
+    testTextInputs.push(<WidgetDropdown name="Vertical Alignment" key="test_dropdown_va" options={['top', 'center', 'bottom']} initialProperty="start" alignmentType="vertical" />);
     testTextInputs.push(<WidgetInput type="color" name="Color" defaultValue="#000000" key="test_color" property="fillStyle" />);
     widgetGroups.push(
       <WidgetGroup

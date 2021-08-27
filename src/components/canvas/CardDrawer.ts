@@ -116,7 +116,7 @@ class CardDrawer {
       let yPos: number | undefined;
 
       // Determining X Position
-      if (cards[i].position.left === 'center' || cards[i].position.right === 'center') {
+      if (cards[i].position.left === 'center') {
         xPos = this.canvas.width / 2;
       } else if (Number.isInteger(cards[i].position.left)) {
         xPos = this.card.sides.left;
@@ -127,7 +127,7 @@ class CardDrawer {
       }
 
       // Determining Y Position
-      if (cards[i].position.top === 'center' || cards[i].position.bottom === 'center') {
+      if (cards[i].position.top === 'center') {
         yPos = this.canvas.height / 2;
       } else if (Number.isInteger(cards[i].position.top)) {
         yPos = this.card.sides.top;

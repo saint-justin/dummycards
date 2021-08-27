@@ -1,6 +1,7 @@
 // All allowable text align options
 export type TextAlignOpt = 'left' | 'center' | 'right';
-export type RelativePositionTypes = 'start' | 'end' | 'center';
+export type DropdownOpt = 'left' | 'top' | 'center' | 'right' | 'bottom';
+export type RelativePositionType = 'start' | 'end' | 'center';
 export type AlignmentType = 'vertical' | 'horizontal' | 'other';
 
 // Generic type to fit into position

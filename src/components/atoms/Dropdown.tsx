@@ -1,14 +1,13 @@
 import * as React from 'react';
-import { useState } from 'react';
-import { RelativePositionTypes, AlignmentType } from '../../types';
+import { RelativePositionType, AlignmentType, DropdownOpt } from '../../types';
 import helper from '../../utils/Helpers';
 
 type WDropdownProps = {
   name: string,
-  options: string[],
-  initialProperty: RelativePositionTypes,
+  options: DropdownOpt[],
+  initialProperty: RelativePositionType,
   alignmentType: AlignmentType,
-  action?: ((at: AlignmentType, rpt: RelativePositionTypes) => void),
+  action?: ((at: AlignmentType, rpt: RelativePositionType) => void),
 };
 
 const WidgetDropdown = (props: WDropdownProps): JSX.Element => {
@@ -21,32 +20,40 @@ const WidgetDropdown = (props: WDropdownProps): JSX.Element => {
     action,
   } = props;
 
-  // Initial states
-  const [positionType, setPositionType] = useState<RelativePositionTypes>(initialProperty);
-
-  // Refs to input and select elements
+  // Initial state, ref, and lookup table
   const selectRef = React.createRef<HTMLSelectElement>();
+  const lookup = {
+    left: 'start',
+    top: 'start',
+    center: 'center',
+    right: 'end',
+    bottom: 'end',
+  };
 
   // Helper fxns to clean names and generate option boxes from strings
-  const generateOptions = (opts: string[]) => opts.map(
-    (s: string): JSX.Element => <option value={s.toLowerCase()} key={s}>{s}</option>,
+  const generateOptions = (opts: DropdownOpt[]) => opts.map(
+    (s: DropdownOpt): JSX.Element => <option value={s.toLowerCase()} key={s}>{s}</option>,
   );
 
   // Event for handling select changes
   const handleSelectChange = (e:React.ChangeEvent<HTMLSelectElement>) => {
     // Error out for faulty values
-    if (!e) {
+    if (!e || !e.target || !e.target.value) {
       console.error('Error: Select handle event returned faulty value');
       return;
     }
 
-    if (['start', 'end', 'center'].includes(e.target.value)) {
-      const newValue = e.target.value as RelativePositionTypes;
-      setPositionType(newValue);
-
-      if (!action) return;
-      action(alignmentType, positionType);
+    // Converts the given value to a real value based on lookup table
+    const val = e?.target?.value;
+    if (val !== 'top' && val !== 'left' && val !== 'center' && val !== 'right' && val !== 'bottom') {
+      throw new Error(`Error: Invalid value passed to lookup table on Dropdown Molecule (${name})`);
     }
+    const newValue = e.target.value as DropdownOpt;
+    const converted = lookup[newValue] as RelativePositionType;
+
+    // Update the parent w/ the given action if able
+    if (!action) throw new Error(`Error: Action not implemented for button (${name})`);
+    action(alignmentType, converted);
   };
 
   return (
