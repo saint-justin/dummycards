@@ -1,18 +1,13 @@
 import * as React from 'react';
-import { useState } from 'react';
-import { WInput } from '../../types';
+import { cleanString } from '../../utils/Helpers';
 
 type WDropdownProps = {
   name: string,
-  defaultValue?: string | number,
-  action?: ((widgetInput: WInput) => void),
+  defaultValue: string | number,
+  action?: ((value: string) => void),
 };
 
 const WidgetDropdown = ({ name, defaultValue, action }: WDropdownProps): React.ReactElement => {
-  const [value, setValue] = useState(defaultValue);
-
-  // Helper fxn to clean names for use as ID's
-  const cleanName = (str: string): string => `entry_ ${str.replace(/\s/g, '_').toLowerCase()}`;
   const inputRef = React.createRef<HTMLInputElement>();
 
   // Input Change Handler
@@ -22,26 +17,21 @@ const WidgetDropdown = ({ name, defaultValue, action }: WDropdownProps): React.R
       return;
     }
     const target = e.target as HTMLInputElement;
-    setValue(target.value);
-    action({ value: target.value, property: 'fillStyle' });
+    action(target.value);
   };
 
   return (
-    <>
-      <label htmlFor={`color_${cleanName(name)}`}>{name}</label>
-      <input
-        id={`color_${cleanName(name)}`}
-        type="color"
-        value={value}
-        onChange={inputChange}
-        ref={inputRef}
-      />
-    </>
+    <input
+      id={`color_${cleanString(name)}`}
+      type="color"
+      value={defaultValue}
+      onChange={inputChange}
+      ref={inputRef}
+    />
   );
 };
 
 WidgetDropdown.defaultProps = {
-  defaultValue: '#000000',
   action: undefined,
 };
 

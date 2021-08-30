@@ -1,79 +1,59 @@
 import * as React from 'react';
-import { RelativePositionType, AlignmentType, DropdownOpt } from '../../types';
-import helper from '../../utils/Helpers';
+import { capitalizeFirst, cleanString } from '../../utils/Helpers';
 
 type WDropdownProps = {
   name: string,
-  options: DropdownOpt[],
-  initialProperty: RelativePositionType,
-  alignmentType: AlignmentType,
-  action?: ((at: AlignmentType, rpt: RelativePositionType) => void),
+  options: string[],
+  defaultOption: string,
+  action: ((str: string) => void),
 };
 
 const WidgetDropdown = (props: WDropdownProps): JSX.Element => {
-  // Obj destructuring
   const {
     name,
     options,
-    initialProperty,
-    alignmentType,
+    defaultOption,
     action,
   } = props;
 
-  // Initial state, ref, and lookup table
-  const selectRef = React.createRef<HTMLSelectElement>();
-  const lookup = {
-    left: 'start',
-    top: 'start',
-    center: 'center',
-    right: 'end',
-    bottom: 'end',
-  };
-
   // Helper fxns to clean names and generate option boxes from strings
-  const generateOptions = (opts: DropdownOpt[]) => opts.map(
-    (s: DropdownOpt): JSX.Element => <option value={s.toLowerCase()} key={s}>{s}</option>,
-  );
+  const generateOptions = (opts: string[]): JSX.Element[] => {
+    let defaultSelected = false;
+    const elements = opts.map((s: string): JSX.Element => {
+      if (s === defaultOption) defaultSelected = true;
+      // eslint-disable-next-line max-len
+      return <option value={s.toLowerCase()} key={s}>{capitalizeFirst(s)}</option>;
+    });
+    if (!defaultSelected) throw new Error('Error: No default element selected in dropdown');
+    return elements;
+  };
 
   // Event for handling select changes
   const handleSelectChange = (e:React.ChangeEvent<HTMLSelectElement>) => {
     // Error out for faulty values
     if (!e || !e.target || !e.target.value) {
-      console.error('Error: Select handle event returned faulty value');
+      console.error(`Error: Dropdown handle event returned faulty value on element (${name})`);
       return;
     }
 
     // Converts the given value to a real value based on lookup table
-    const val = e?.target?.value;
-    if (val !== 'top' && val !== 'left' && val !== 'center' && val !== 'right' && val !== 'bottom') {
-      throw new Error(`Error: Invalid value passed to lookup table on Dropdown Molecule (${name})`);
-    }
-    const newValue = e.target.value as DropdownOpt;
-    const converted = lookup[newValue] as RelativePositionType;
+    const val = e.target?.value;
 
     // Update the parent w/ the given action if able
-    if (!action) throw new Error(`Error: Action not implemented for button (${name})`);
-    action(alignmentType, converted);
+    if (!action) throw new Error(`Error: Action not implemented for dropdown (${name})`);
+    action(val);
   };
 
   return (
-    <>
-      <label htmlFor={`select_${helper.cleanString(name)}`}>{name}</label>
-      <div className="flex-row" id={`select_${helper.cleanString(name)}`}>
-        <select
-          onChange={handleSelectChange}
-          ref={selectRef}
-          defaultValue={initialProperty}
-        >
-          {generateOptions(options)}
-        </select>
-      </div>
-    </>
+    <div className="flex-row" id={`dropdown_${cleanString(name)}`}>
+      <select
+        onChange={handleSelectChange}
+        defaultValue={defaultOption}
+      >
+        {generateOptions(options)}
+      </select>
+    </div>
   );
-};
-
-WidgetDropdown.defaultProps = {
-  action: undefined,
 };
 
 export default WidgetDropdown;

@@ -5,6 +5,7 @@
   "scripts": {
     "start": "parcel index.html",
     "build": "parcel build index.html",
+    "lint": "eslint ./src --ext .tsx,.ts,.d.ts --fix",
     "pretest": "eslint ./src --ext .tsx,.ts,.d.ts --fix",
     "test": "jest --coverage",
     "typecheck": "tsc --noEmit",

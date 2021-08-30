@@ -1,32 +1,43 @@
 import * as React from 'react';
 import Label from '../atoms/Label';
-import Color from '../atoms/Color';
-import { WInput } from '../../utils/types';
-import helpers from '../../utils/Helpers';
+import Dropdown from '../atoms/Dropdown';
+import { DrawableProperty, WInput } from '../../utils/types';
+import { cleanString } from '../../utils/Helpers';
 
-type WColorProps = {
+type WDropdownProps = {
   name: string,
-  action: ((widgetInput: WInput) => void),
-  defaultValue?: string | number,
+  drawableProp: DrawableProperty,
+  options: string[],
+  action?: ((widgetInput: WInput) => void),
+  defaultOption?: string,
+
 };
 
-const WidgetColor = ({ name, defaultValue, action }: WColorProps): React.ReactElement => {
+const WidgetDropdown = ({
+  name, drawableProp, options, action, defaultOption,
+}: WDropdownProps): React.ReactElement => {
   // Input Change Handler
-  const inputChange = (newColor: string) => {
-    if (!action) throw new Error('Error: Tried to call action in colorwidget before action was set');
-    action({ value: newColor, property: 'fillStyle' });
+  const inputChange = (newValue: string) => {
+    if (!action) throw new Error('Error: Tried to call action in WidgetDropdown before action was set');
+    action({ value: newValue, property: drawableProp });
   };
 
   return (
     <>
-      <Label name={name} labelFor={`color_${helpers.cleanString(name)}`} />
-      <Color name={name} action={inputChange} defaultValue={defaultValue || '#000000'} />
+      <Label name={name} labelFor={`dropdown_${cleanString(name)}`} />
+      <Dropdown
+        name={name}
+        action={inputChange}
+        options={options}
+        defaultOption={defaultOption || options[0]}
+      />
     </>
   );
 };
 
-WidgetColor.defaultProps = {
-  defaultValue: '#000000',
+WidgetDropdown.defaultProps = {
+  defaultOption: undefined,
+  action: undefined,
 };
 
-export default WidgetColor;
+export default WidgetDropdown;

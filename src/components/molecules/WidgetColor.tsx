@@ -1,8 +1,9 @@
 import * as React from 'react';
+import { useEffect } from 'react';
 import Label from '../atoms/Label';
 import Color from '../atoms/Color';
 import { WInput } from '../../utils/types';
-import helpers from '../../utils/Helpers';
+import { cleanString } from '../../utils/Helpers';
 
 type WColorProps = {
   name: string,
@@ -17,9 +18,15 @@ const WidgetColor = ({ name, defaultValue, action }: WColorProps): React.ReactEl
     action({ value: newColor, property: 'fillStyle' });
   };
 
+  // Push one update as soon as set up
+  useEffect(() => {
+    const initialValue = defaultValue || '#000000';
+    inputChange(initialValue.toString());
+  }, []);
+
   return (
     <>
-      <Label name={name} labelFor={`color_${helpers.cleanString(name)}`} />
+      <Label name={name} labelFor={`color_${cleanString(name)}`} />
       <Color name={name} action={inputChange} defaultValue={defaultValue || '#000000'} />
     </>
   );
