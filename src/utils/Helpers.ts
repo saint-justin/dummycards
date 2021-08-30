@@ -19,6 +19,5 @@ export const capitalizeFirst = (str: string): string => {
 export const titleCase = (str: string): string => {
   const arr = str.split(' ');
   const replacement = arr.map((word: string) => capitalizeFirst(word));
-  console.log(`In: ${str}   \nOut: ${replacement.join(' ')}`);
   return replacement.join(' ');
 };
