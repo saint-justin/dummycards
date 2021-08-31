@@ -5,12 +5,14 @@
     "project": "./tsconfig.json"
   },
   "plugins": [
-    "@typescript-eslint"
+    "@typescript-eslint",
+    "testcafe"
   ],
   "extends": [
     "eslint:recommended",
     "airbnb",
-    "airbnb-typescript"
+    "airbnb-typescript",
+    "plugin:testcafe/recommended"
   ],
   "rules": {
     "no-console": 

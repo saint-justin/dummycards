@@ -52,7 +52,7 @@ export default (): JSX.Element => {
     const widgetGroups = [];
 
     // Creating a first widget to house the Card's dimensions
-    const dimensionInputs = [];
+    const dimensionInputs: JSX.Element[] = [];
     dimensionInputs.push(<WidgetInput type="number" name="Height" defaultValue="1125" key="dimensions_height" action={updateHeight} drawableProp="text" />);
     dimensionInputs.push(<WidgetInput type="number" name="Width" defaultValue="825" key="dimensions_width" action={updateWidth} drawableProp="text" />);
     widgetGroups.push(
@@ -66,9 +66,9 @@ export default (): JSX.Element => {
     );
 
     // Creating a second widget to allow users to submit info to be displayed
-    const testTextInputs = [];
+    const testTextInputs: JSX.Element[] = [];
     testTextInputs.push(<WidgetInput name="Placeholder Text" defaultValue="coolest clam in the west" key="test_text" drawableProp="text" />);
-    testTextInputs.push(<WidgetDropdown name="Text Align" key="test_dropdownTextAlign" options={['left', 'center', 'right']} drawableProp="textAlign" defaultOption="right" />);
+    testTextInputs.push(<WidgetDropdown name="Text Align" key="test_dropdownTextAlign" options={['left', 'center', 'right']} drawableProp="textAlign" defaultOption="left" />);
     // testTextInputs.push(<WidgetDropdown name="Horizontal Alignment" key="test_dropdown_ha" options={['left', 'center', 'right']} initialProperty="start" alignmentType="horizontal" />);
     // testTextInputs.push(<WidgetDropdown name="Vertical Alignment" key="test_dropdown_va" options={['top', 'center', 'bottom']} initialProperty="start" alignmentType="vertical" />);
     testTextInputs.push(<WidgetInput type="color" name="Color" defaultValue="#00ff00" key="test_color" drawableProp="fillStyle" />);

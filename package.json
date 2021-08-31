@@ -8,6 +8,7 @@
     "lint": "eslint ./src --ext .tsx,.ts,.d.ts --fix",
     "pretest": "eslint ./src --ext .tsx,.ts,.d.ts --fix",
     "test": "jest --coverage",
+    "testcafe": "testcafe ./testcafe/test.ts",
     "typecheck": "tsc --noEmit",
     "typewatch": "tsc --noEmit --watch"
   },
@@ -19,6 +20,7 @@
     "lodash": "^4.17.21",
     "react": "^16.13.1",
     "react-dom": "^16.13.1",
+    "testcafe": "^1.15.3",
     "ts-jest": "^27.0.5"
   },
   "devDependencies": {
@@ -45,6 +47,7 @@
     "eslint-plugin-jsx-a11y": "^6.4.1",
     "eslint-plugin-react": "^7.24.0",
     "eslint-plugin-react-hooks": "^4.2.0",
+    "eslint-plugin-testcafe": "^0.2.1",
     "jest": "^27.0.6",
     "parcel": "^2.0.0-alpha.3.2",
     "ts-node": "^10.2.1",
