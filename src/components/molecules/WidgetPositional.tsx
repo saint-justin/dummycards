@@ -1,10 +1,11 @@
 import * as React from 'react';
 import { useState, useEffect } from 'react';
+import _ from 'lodash';
+
 import Dropdown from '../atoms/Dropdown';
 import Label from '../atoms/Label';
 import Input from '../atoms/Input';
 import { WInput } from '../../utils/types';
-import { cleanString } from '../../utils/Helpers';
 
 import './WidgetPositional.scss';
 
@@ -24,6 +25,7 @@ const WidgetDropdown = (props: WDropdownProps): JSX.Element => {
     name, positionalType, placeholder, action, defaultOption, defaultValue,
   } = props;
 
+  const [id] = useState(_.uniqueId(name));
   const [value, setValue] = useState<string>(defaultValue.toString());
   const [activeOpt, setActiveOpt] = useState<PositionalOption>(defaultOption);
   const [options, setOptions] = useState<string[]>([]);
@@ -83,16 +85,17 @@ const WidgetDropdown = (props: WDropdownProps): JSX.Element => {
 
   return (
     <>
-      <Label name={name} labelFor={`positional_${cleanString(name)}`} />
-      <div className="widget-positional">
+      <Label name={name} labelFor={id} />
+      <div className="widget-positional" id={id}>
         <Dropdown
+          id={_.uniqueId('dropdown_')}
           name={name}
           action={inputChange}
           options={options}
           defaultOption={defaultOption || options[0]}
         />
         <Input
-          name={name}
+          id={_.uniqueId('input_')}
           type="text"
           placeholder={placeholder || 'placeholder text'}
           defaultValue={defaultValue || 10}

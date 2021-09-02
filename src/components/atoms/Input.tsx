@@ -1,9 +1,8 @@
 import * as React from 'react';
 import { useState } from 'react';
-import { cleanString } from '../../utils/Helpers';
 
 type WInputProps = {
-  name: string,
+  id: string,
   type: string,
   disabled?: boolean,
   placeholder?: string,
@@ -13,7 +12,7 @@ type WInputProps = {
 
 const WidgetInput = (props: WInputProps): React.ReactElement => {
   const {
-    name, type, disabled, placeholder, defaultValue, action,
+    id, type, disabled, placeholder, defaultValue, action,
   } = props;
 
   const [value, setValue] = useState(defaultValue);
@@ -32,7 +31,7 @@ const WidgetInput = (props: WInputProps): React.ReactElement => {
   return (
     <input
       placeholder={placeholder}
-      id={`input_${cleanString(name)}`}
+      id={id}
       value={value}
       type={type}
       onChange={inputChange}

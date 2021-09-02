@@ -1,9 +1,10 @@
 import * as React from 'react';
 import { useEffect } from 'react';
-import { capitalizeFirst, cleanString } from '../../utils/Helpers';
+import { capitalizeFirst } from '../../utils/Helpers';
 
 type WDropdownProps = {
   name: string,
+  id: string,
   options: string[],
   defaultOption: string,
   action: ((str: string) => void),
@@ -13,6 +14,7 @@ type WDropdownProps = {
 const WidgetDropdown = (props: WDropdownProps): JSX.Element => {
   const {
     name,
+    id,
     options,
     defaultOption,
     action,
@@ -44,7 +46,7 @@ const WidgetDropdown = (props: WDropdownProps): JSX.Element => {
   }, []);
 
   return (
-    <div className="flex-row" id={`dropdown_${cleanString(name)}`}>
+    <div className="flex-row" id={id}>
       <select
         onChange={handleSelectChange}
         placeholder={defaultOption}

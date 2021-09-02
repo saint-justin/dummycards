@@ -1,8 +1,10 @@
 import * as React from 'react';
+import { useState } from 'react';
+import * as _ from 'lodash';
+
 import Label from '../atoms/Label';
 import Dropdown from '../atoms/Dropdown';
 import { DrawableProperty, WInput } from '../../utils/types';
-import { cleanString } from '../../utils/Helpers';
 
 type WDropdownProps = {
   name: string,
@@ -13,9 +15,12 @@ type WDropdownProps = {
 
 };
 
-const WidgetDropdown = ({
-  name, drawableProp, options, action, defaultOption,
-}: WDropdownProps): React.ReactElement => {
+const WidgetDropdown = (props: WDropdownProps): React.ReactElement => {
+  const {
+    name, drawableProp, options, action, defaultOption,
+  } = props;
+  const [id] = useState(_.uniqueId(`${name}_`));
+
   // Input Change Handler
   const inputChange = (newValue: string) => {
     if (!action) throw new Error('Error: Tried to call action in WidgetDropdown before action was set');
@@ -24,9 +29,10 @@ const WidgetDropdown = ({
 
   return (
     <>
-      <Label name={name} labelFor={`dropdown_${cleanString(name)}`} />
+      <Label name={name} labelFor={id} />
       <Dropdown
         name={name}
+        id={id}
         action={inputChange}
         options={options}
         defaultOption={defaultOption || options[0]}
