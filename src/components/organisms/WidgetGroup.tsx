@@ -66,7 +66,7 @@ export default ({ name, widgetInputSet, drawableChanged }: WidgetGroup): JSX.Ele
         return;
 
       default:
-        throw new Error(`Error: Illegal drawable property given to widgetGroup (${name}`);
+        throw new Error(`Error: Illegal drawable property given to widgetGroup (${name})`);
     }
   };
 

@@ -25,22 +25,23 @@ html, body, #root {
 
   button {
     padding: 8px 0;
-    background: rgba(255, 255, 255, 0.829);
-    box-shadow: 0 0 5px -1px rgba(0,0,0,0.25);
+    background: #fff;
+    box-shadow: 0 0 5px -1px rgba(0, 0, 0, 0.25);
     border: 1px solid rgba(0, 0, 0, 0.6);
     border-radius: 5px;
+    transition: 0.15s;
   }
 
   button:hover {
-    // background-color: green;
-    background: rgb(219,219,219);
-    background: linear-gradient(0deg, rgba(219,219,219,1) 0%, rgba(255,255,255,1) 100%);
+    // background: rgb(219,219,219);
+    // background: linear-gradient(0deg, rgba(219,219,219,1) 0%, rgba(255,255,255,1) 100%);
+    padding: 10px 0;
+    border: 2.5px solid rgba(0, 0, 0, 0.6);
+    box-shadow: 0 2px 5px -1px rgba(0, 0, 0, 0.5);
   }
 
   button:active {
-    // background-color: green;
-    background: rgb(219,219,219);
-    background: linear-gradient(0deg, rgba(194,194,194,1) 0%, rgba(255,255,255,1) 100%);
+    background:rgb(168, 212, 168);
   }
 }
 

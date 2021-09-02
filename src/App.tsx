@@ -7,6 +7,7 @@ import { Drawable, Size, WInput } from './utils/types';
 import Button from './components/atoms/Button';
 import WidgetInput from './components/molecules/WidgetInput';
 import WidgetDropdown from './components/molecules/WidgetDropdown';
+import WidgetPositional from './components/molecules/WidgetPositional';
 import WidgetGroup from './components/organisms/WidgetGroup';
 import Canvas from './components/atoms/Canvas';
 
@@ -51,11 +52,43 @@ export default (): JSX.Element => {
   // Creating a second widget to allow users to submit info to be displayed
   const generateNewInputWidget = (key: number, name: string): JSX.Element => {
     const generatedInputTypes: JSX.Element[] = [];
-    generatedInputTypes.push(<WidgetInput name="Placeholder Text" defaultValue="coolest clam in the west" key="test_text" drawableProp="text" />);
-    generatedInputTypes.push(<WidgetDropdown name="Text Align" key="test_dropdownTextAlign" options={['left', 'center', 'right']} drawableProp="textAlign" defaultOption="left" />);
-    // generatedInputTypes.push(<WidgetDropdown name="Horizontal Alignment" key="test_dropdown_ha" options={['left', 'center', 'right']} initialProperty="start" alignmentType="horizontal" />);
-    // generatedInputTypes.push(<WidgetDropdown name="Vertical Alignment" key="test_dropdown_va" options={['top', 'center', 'bottom']} initialProperty="start" alignmentType="vertical" />);
-    generatedInputTypes.push(<WidgetInput type="color" name="Color" defaultValue="#00ff00" key="test_color" drawableProp="fillStyle" />);
+    generatedInputTypes.push(<WidgetInput
+      name="Placeholder Text"
+      defaultValue="coolest clam in the west"
+      key="test_text"
+      drawableProp="text"
+    />);
+    generatedInputTypes.push(<WidgetDropdown
+      name="Text Align"
+      key="test_dropdownTextAlign"
+      options={['left', 'center', 'right']}
+      drawableProp="textAlign"
+      defaultOption="left"
+    />);
+
+    generatedInputTypes.push(<WidgetPositional
+      name="Horizontal Alignment"
+      key="test_dropdown_ha"
+      defaultValue="10"
+      defaultOption="left"
+      positionalType="horizontal"
+    />);
+
+    generatedInputTypes.push(<WidgetPositional
+      name="Vertical Alignment"
+      key="test_dropdown_va"
+      defaultValue="10"
+      defaultOption="left"
+      positionalType="vertical"
+    />);
+
+    generatedInputTypes.push(<WidgetInput
+      type="color"
+      name="Color"
+      defaultValue="#00ff00"
+      key="test_color"
+      drawableProp="fillStyle"
+    />);
 
     return (
       <WidgetGroup
@@ -99,27 +132,7 @@ export default (): JSX.Element => {
 
     widgetGroups.push(generateNewInputWidget(1, 'Test Group'));
     widgetGroups.push(generateNewInputWidget(2, 'Test Group2'));
-
-    /*
-    useCallback(async (d: Drawable, id: string) => {
-      setDrawables((currentDrawables: Map<string, Drawable>) => {
-        const drawablesClone = _.cloneDeep(currentDrawables);
-        drawablesClone.set(id, d);
-        return drawablesClone;
-      });
-    }, []);
-    */
-
-
-    // const addMoreOnClick = () => {
-    //   const id = widgets?.length;
-    //   const newWidget = generateNewInputWidget(id || -1, 'Extra Input');
-    //   const newArr = _.cloneDeep(widgets);
-    //   newArr.push(newWidget);
-    //   setWidgets(newArr);
-    // };
-
-    setAddMoreButton(<Button name="Add More Widgets" action={addMoreOnClick} />);
+    setAddMoreButton(<Button name="Add Another Widgets" action={addMoreOnClick} />);
 
     // Set our collection of widgets into state
     setWidgets(widgetGroups);

@@ -7,6 +7,7 @@ type WDropdownProps = {
   options: string[],
   defaultOption: string,
   action: ((str: string) => void),
+  ref?: React.MutableRefObject<HTMLSelectElement>
 };
 
 const WidgetDropdown = (props: WDropdownProps): JSX.Element => {
@@ -15,6 +16,7 @@ const WidgetDropdown = (props: WDropdownProps): JSX.Element => {
     options,
     defaultOption,
     action,
+    ref,
   } = props;
 
   // Helper fxns to clean names and generate option boxes from strings
@@ -46,11 +48,16 @@ const WidgetDropdown = (props: WDropdownProps): JSX.Element => {
       <select
         onChange={handleSelectChange}
         placeholder={defaultOption}
+        ref={ref}
       >
         {generateOptions(options)}
       </select>
     </div>
   );
+};
+
+WidgetDropdown.defaultProps = {
+  ref: null,
 };
 
 export default WidgetDropdown;
