@@ -17,7 +17,7 @@ type WidgetGroup = {
 
 export default ({ name, widgetInputSet, drawableChanged }: WidgetGroup): JSX.Element => {
   // Generate an id and base drawable object
-  const [id] = useState<string>(`name_${Date.now()}`);
+  const [id] = useState<string>(`${name}_${Date.now()}`);
   const [drawableText, setDrawableText] = useState<string>('default_name');
   const [drawableTextAlign, setDrawableTextAlign] = useState<TextAlignOpt>('left');
   const [drawableFillStyle, setDrawableFillStyle] = useState<string>(name);
@@ -27,18 +27,6 @@ export default ({ name, widgetInputSet, drawableChanged }: WidgetGroup): JSX.Ele
     top: 10,
     bottom: 'none',
   });
-
-  // const [drawable, setDrawable] = useState<Drawable>({
-  //   text: 'placeholder_name',
-  //   fillStyle: '#000000',
-  //   textAlign: 'left',
-  //   position: {
-  //     left: 10,
-  //     right: 'none',
-  //     top: 10,
-  //     bottom: 'none',
-  //   },
-  // });
 
   // Defines what the widget should do any time we're trying to update internal drawable info
   const adjustDrawableFromWidget = (updateInfo: WInput): void => {
@@ -80,9 +68,6 @@ export default ({ name, widgetInputSet, drawableChanged }: WidgetGroup): JSX.Ele
       default:
         throw new Error(`Error: Illegal drawable property given to widgetGroup (${name}`);
     }
-
-    // If the property was legally set, update the drawable in parent
-    // drawableChanged(drawableClone, id);
   };
 
   // Checks if a given element has an 'action' prop and appends one if it doesn't
@@ -110,8 +95,6 @@ export default ({ name, widgetInputSet, drawableChanged }: WidgetGroup): JSX.Ele
     };
 
     drawableChanged(newDrawable, id);
-    console.log('Drawable updated:');
-    console.log(newDrawable);
   }, [drawableText, drawableTextAlign, drawableFillStyle, drawablePosition]);
 
   // The actual JSX to be returned

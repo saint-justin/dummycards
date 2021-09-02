@@ -40,7 +40,7 @@ export type Size = {
 };
 
 // Widget Info Types
-export type DrawableProperty = 'text' | 'textAlign' | 'fillStyle' | 'font' | 'top' | 'bottom' | 'left' | 'right';
+export type DrawableProperty = 'text' | 'textAlign' | 'fillStyle' | 'font' | 'top' | 'bottom' | 'left' | 'right' | 'none';
 export type WInput = {
   property: DrawableProperty,
   value: string,

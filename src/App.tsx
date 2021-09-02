@@ -1,9 +1,10 @@
 /* eslint-disable max-len */
 import * as React from 'react';
 import * as _ from 'lodash';
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useCallback } from 'react';
 import { Drawable, Size, WInput } from './utils/types';
 
+import Button from './components/atoms/Button';
 import WidgetInput from './components/molecules/WidgetInput';
 import WidgetDropdown from './components/molecules/WidgetDropdown';
 import WidgetGroup from './components/organisms/WidgetGroup';
@@ -13,8 +14,9 @@ import './App.scss';
 
 export default (): JSX.Element => {
   const [cardDimensions, setCardDimensions] = useState<Size>({ height: 1125, width: 825 });
-  const [widgets, setWidgets] = useState<JSX.Element[] | undefined>(undefined);
+  const [widgets, setWidgets] = useState<JSX.Element[]>([]);
   const [drawables, setDrawables] = useState<Map<string, Drawable>>(new Map<string, Drawable>());
+  const [addMoreButton, setAddMoreButton] = useState<JSX.Element>();
 
   // Updater functions to update card dimensions one at a time
   const updateOneDimension = (s: string | void, which: 'height' | 'width'): void => {
@@ -30,13 +32,13 @@ export default (): JSX.Element => {
   const updateWidth = (newDimension: WInput): void => updateOneDimension(newDimension.value, 'width');
 
   // Callback to a drawable in the map from a widget group based on its id
-  const updateDrawableFromWidgetGroup = (d: Drawable, id: string) => {
-    console.log(`Updating drawable id ${id}...`);
-    console.log(d);
-    const clone = _.cloneDeep(drawables);
-    clone.set(id, d);
-    setDrawables(clone);
-  };
+  const updateDrawableFromWidgetGroup = useCallback(async (d: Drawable, id: string) => {
+    setDrawables((currentDrawables: Map<string, Drawable>) => {
+      const drawablesClone = _.cloneDeep(currentDrawables);
+      drawablesClone.set(id, d);
+      return drawablesClone;
+    });
+  }, []);
 
   // Function to extract the drawable objects from drawables dict
   const extractDrawables = (dict: Map<string, Drawable>): Drawable[] => {
@@ -46,9 +48,39 @@ export default (): JSX.Element => {
     return draws;
   };
 
+  // Creating a second widget to allow users to submit info to be displayed
+  const generateNewInputWidget = (key: number, name: string): JSX.Element => {
+    const generatedInputTypes: JSX.Element[] = [];
+    generatedInputTypes.push(<WidgetInput name="Placeholder Text" defaultValue="coolest clam in the west" key="test_text" drawableProp="text" />);
+    generatedInputTypes.push(<WidgetDropdown name="Text Align" key="test_dropdownTextAlign" options={['left', 'center', 'right']} drawableProp="textAlign" defaultOption="left" />);
+    // generatedInputTypes.push(<WidgetDropdown name="Horizontal Alignment" key="test_dropdown_ha" options={['left', 'center', 'right']} initialProperty="start" alignmentType="horizontal" />);
+    // generatedInputTypes.push(<WidgetDropdown name="Vertical Alignment" key="test_dropdown_va" options={['top', 'center', 'bottom']} initialProperty="start" alignmentType="vertical" />);
+    generatedInputTypes.push(<WidgetInput type="color" name="Color" defaultValue="#00ff00" key="test_color" drawableProp="fillStyle" />);
+
+    return (
+      <WidgetGroup
+        drawable
+        name={name}
+        widgetInputSet={generatedInputTypes}
+        key={key}
+        drawableChanged={updateDrawableFromWidgetGroup}
+      />
+    );
+  };
+
+  // Fxn to hook into addMoreWidgets button
+  const addMoreOnClick = useCallback(async () => {
+    setWidgets((currentWidgets: JSX.Element[]) => {
+      const id = currentWidgets?.length;
+      const newWidget = generateNewInputWidget(id || -1, 'Extra Input');
+      const newArr = _.cloneDeep(currentWidgets);
+      newArr.push(newWidget);
+      return newArr;
+    });
+  }, []);
+
   // Run-once initialization
   useEffect(() => {
-    // Array to hold all widget groups
     const widgetGroups = [];
 
     // Creating a first widget to house the Card's dimensions
@@ -65,22 +97,29 @@ export default (): JSX.Element => {
       />,
     );
 
-    // Creating a second widget to allow users to submit info to be displayed
-    const testTextInputs: JSX.Element[] = [];
-    testTextInputs.push(<WidgetInput name="Placeholder Text" defaultValue="coolest clam in the west" key="test_text" drawableProp="text" />);
-    testTextInputs.push(<WidgetDropdown name="Text Align" key="test_dropdownTextAlign" options={['left', 'center', 'right']} drawableProp="textAlign" defaultOption="left" />);
-    // testTextInputs.push(<WidgetDropdown name="Horizontal Alignment" key="test_dropdown_ha" options={['left', 'center', 'right']} initialProperty="start" alignmentType="horizontal" />);
-    // testTextInputs.push(<WidgetDropdown name="Vertical Alignment" key="test_dropdown_va" options={['top', 'center', 'bottom']} initialProperty="start" alignmentType="vertical" />);
-    testTextInputs.push(<WidgetInput type="color" name="Color" defaultValue="#00ff00" key="test_color" drawableProp="fillStyle" />);
-    widgetGroups.push(
-      <WidgetGroup
-        drawable
-        name="Text Input"
-        widgetInputSet={testTextInputs}
-        key={1}
-        drawableChanged={updateDrawableFromWidgetGroup}
-      />,
-    );
+    widgetGroups.push(generateNewInputWidget(1, 'Test Group'));
+    widgetGroups.push(generateNewInputWidget(2, 'Test Group2'));
+
+    /*
+    useCallback(async (d: Drawable, id: string) => {
+      setDrawables((currentDrawables: Map<string, Drawable>) => {
+        const drawablesClone = _.cloneDeep(currentDrawables);
+        drawablesClone.set(id, d);
+        return drawablesClone;
+      });
+    }, []);
+    */
+
+
+    // const addMoreOnClick = () => {
+    //   const id = widgets?.length;
+    //   const newWidget = generateNewInputWidget(id || -1, 'Extra Input');
+    //   const newArr = _.cloneDeep(widgets);
+    //   newArr.push(newWidget);
+    //   setWidgets(newArr);
+    // };
+
+    setAddMoreButton(<Button name="Add More Widgets" action={addMoreOnClick} />);
 
     // Set our collection of widgets into state
     setWidgets(widgetGroups);
@@ -90,9 +129,13 @@ export default (): JSX.Element => {
     <>
       <section id="widget-toolbar">
         {widgets}
+        {addMoreButton}
       </section>
       <div id="display">
-        <Canvas drawables={extractDrawables(drawables)} size={cardDimensions} />
+        <Canvas
+          drawables={extractDrawables(drawables)}
+          size={cardDimensions}
+        />
       </div>
     </>
   );
