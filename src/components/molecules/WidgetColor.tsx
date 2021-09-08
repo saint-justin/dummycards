@@ -7,7 +7,7 @@ import { cleanString } from '../../utils/Helpers';
 
 type WColorProps = {
   name: string,
-  action: ((widgetInput: WInput) => void),
+  action?: ((widgetInput: WInput) => void),
   defaultValue?: string | number,
 };
 
@@ -34,6 +34,7 @@ const WidgetColor = ({ name, defaultValue, action }: WColorProps): React.ReactEl
 
 WidgetColor.defaultProps = {
   defaultValue: '#000000',
+  action: undefined,
 };
 
 export default WidgetColor;

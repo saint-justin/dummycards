@@ -1,0 +1,13 @@
+@import '../../../StyleVars.scss';
+
+.generic-dropdown {
+  box-shadow: $hard-shadow;
+  border: $hard-border;
+  flex-grow: 1;
+  padding: 4px;
+
+  select {
+    flex-grow: 1;
+    border: none;
+  }
+}

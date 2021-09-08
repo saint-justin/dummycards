@@ -7,7 +7,7 @@ import Label from '../atoms/Label';
 import Input from '../atoms/Input';
 import { WInput } from '../../utils/types';
 
-import './WidgetPositional.scss';
+import './styles/WidgetPositional.scss';
 
 type PositionalOption = 'left' | 'right' | 'top' | 'bottom' | 'center';
 

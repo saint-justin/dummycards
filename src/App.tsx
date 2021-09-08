@@ -6,6 +6,7 @@ import { Drawable, Size, WInput } from './utils/types';
 
 import Button from './components/atoms/Button';
 import WidgetInput from './components/molecules/WidgetInput';
+import WidgetColor from './components/molecules/WidgetColor';
 import WidgetDropdown from './components/molecules/WidgetDropdown';
 import WidgetPositional from './components/molecules/WidgetPositional';
 import WidgetGroup from './components/organisms/WidgetGroup';
@@ -50,14 +51,16 @@ export default (): JSX.Element => {
   };
 
   // Creating a second widget to allow users to submit info to be displayed
-  const generateNewInputWidget = (key: number, name: string): JSX.Element => {
+  const generateNewInputWidget = (key: number, name: string, data?: Drawable): JSX.Element => {
     const generatedInputTypes: JSX.Element[] = [];
+
     generatedInputTypes.push(<WidgetInput
       name="Placeholder Text"
-      defaultValue="coolest clam in the west"
+      defaultValue={data?.text || 'coolest clam in the west'}
       key="test_text"
       drawableProp="text"
     />);
+
     generatedInputTypes.push(<WidgetDropdown
       name="Text Align"
       key="test_dropdownTextAlign"
@@ -78,16 +81,14 @@ export default (): JSX.Element => {
       name="Vertical Alignment"
       key="test_dropdown_va"
       defaultValue="10"
-      defaultOption="left"
+      defaultOption="top"
       positionalType="vertical"
     />);
 
-    generatedInputTypes.push(<WidgetInput
-      type="color"
+    generatedInputTypes.push(<WidgetColor
       name="Color"
       defaultValue="#00ff00"
       key="test_color"
-      drawableProp="fillStyle"
     />);
 
     return (

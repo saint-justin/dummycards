@@ -1,0 +1,18 @@
+@import '../../../StyleVars.scss';
+
+.color-generic {
+  padding: 0px;
+  box-shadow: $hard-shadow;
+  background-color: none;
+}
+
+input[type="color"] {
+	-webkit-appearance: none;
+  border: $hard-border;
+}
+input[type="color"]::-webkit-color-swatch-wrapper {
+	padding: 0;
+}
+input[type="color"]::-webkit-color-swatch {
+	border: none;
+}

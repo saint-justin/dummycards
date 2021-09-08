@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { cleanString } from '../../utils/Helpers';
 
+import './styles/Color.scss';
+
 type WDropdownProps = {
   name: string,
   defaultValue: string | number,
@@ -27,6 +29,7 @@ const WidgetDropdown = ({ name, defaultValue, action }: WDropdownProps): React.R
       value={defaultValue}
       onChange={inputChange}
       ref={inputRef}
+      className="color-generic"
     />
   );
 };

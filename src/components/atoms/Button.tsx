@@ -5,7 +5,7 @@ type WInputProps = {
   action?: (() => void),
 };
 
-const WidgetInput = ({ name, action }: WInputProps): React.ReactElement => <button type="button" onClick={action}>{ name }</button>;
+const WidgetInput = ({ name, action }: WInputProps): React.ReactElement => <button type="button" onClick={action} className="generic-button">{ name }</button>;
 
 WidgetInput.defaultProps = {
   action: () => { throw new Error('No action implemented for button'); },

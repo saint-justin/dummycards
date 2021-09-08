@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import {
   TextAlignOpt, Drawable, WInput, RelativePosition,
 } from 'utils/types';
-import './WidgetGroup.scss';
+import './styles/WidgetGroup.scss';
 
 type WidgetGroup = {
   // eslint-disable-next-line react/no-unused-prop-types

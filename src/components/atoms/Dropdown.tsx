@@ -2,6 +2,8 @@ import * as React from 'react';
 import { useEffect } from 'react';
 import { capitalizeFirst } from '../../utils/Helpers';
 
+import './styles/Dropdown.scss';
+
 type WDropdownProps = {
   name: string,
   id: string,
@@ -46,7 +48,7 @@ const WidgetDropdown = (props: WDropdownProps): JSX.Element => {
   }, []);
 
   return (
-    <div className="flex-row" id={id}>
+    <div className="flex-row generic-dropdown" id={id}>
       <select
         onChange={handleSelectChange}
         placeholder={defaultOption}

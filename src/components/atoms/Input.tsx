@@ -1,6 +1,8 @@
 import * as React from 'react';
 import { useState } from 'react';
 
+import './styles/Input.scss';
+
 type WInputProps = {
   id: string,
   type: string,
@@ -36,6 +38,7 @@ const WidgetInput = (props: WInputProps): React.ReactElement => {
       type={type}
       onChange={inputChange}
       disabled={disabled}
+      className="input-generic"
     />
   );
 };
