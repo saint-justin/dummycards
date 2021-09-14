@@ -1,0 +1,26 @@
+@import '../../../StyleVars.scss';
+$button-size: 20px;
+
+.default-slider {
+  box-sizing: border-box;
+  -webkit-appearance: none;
+  width: 100%;
+  background: #FFF;
+  border: $hard-border;
+  box-shadow: $hard-shadow;
+  outline: none;
+  margin: 6px 0;
+  padding: 2.5px 0;
+}
+
+.default-slider::-webkit-slider-thumb {
+  -webkit-appearance: none;
+  appearance: none;
+  width: $button-size;
+  height: $button-size;
+  border-radius: 50%; 
+}
+
+.default-slider::-moz-range-thumb {
+  display: none;
+}

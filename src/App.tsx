@@ -9,6 +9,7 @@ import WidgetInput from './components/molecules/WidgetInput';
 import WidgetColor from './components/molecules/WidgetColor';
 import WidgetDropdown from './components/molecules/WidgetDropdown';
 import WidgetPositional from './components/molecules/WidgetPositional';
+import WidgetValueSlider from './components/molecules/WidgetValueSlider';
 import WidgetGroup from './components/organisms/WidgetGroup';
 import Canvas from './components/atoms/Canvas';
 
@@ -77,12 +78,21 @@ export default (): JSX.Element => {
       positionalType="horizontal"
     />);
 
-    generatedInputTypes.push(<WidgetPositional
+    // generatedInputTypes.push(<WidgetPositional
+    //   name="Vertical Alignment"
+    //   key="test_dropdown_va"
+    //   defaultValue="10"
+    //   defaultOption="top"
+    //   positionalType="vertical"
+    // />);
+
+    generatedInputTypes.push(<WidgetValueSlider
       name="Vertical Alignment"
-      key="test_dropdown_va"
-      defaultValue="10"
-      defaultOption="top"
-      positionalType="vertical"
+      min={0}
+      max={100}
+      defaultValue={10}
+      defaultProp="textAlign"
+      action={() => {}}
     />);
 
     generatedInputTypes.push(<WidgetColor
@@ -132,7 +142,7 @@ export default (): JSX.Element => {
     );
 
     widgetGroups.push(generateNewInputWidget(1, 'Test Group'));
-    widgetGroups.push(generateNewInputWidget(2, 'Test Group2'));
+    // widgetGroups.push(generateNewInputWidget(2, 'Test Group2'));
     setAddMoreButton(<Button name="Add Another Widgets" action={addMoreOnClick} />);
 
     // Set our collection of widgets into state

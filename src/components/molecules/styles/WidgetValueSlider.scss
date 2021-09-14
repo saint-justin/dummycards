@@ -1,0 +1,26 @@
+//TODO: Style
+.default-valueslider {
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  align-items: center;
+
+  .default-slider {
+    overflow: hidden;
+  }
+
+  .default-slider::-webkit-slider-thumb {
+    width: 0px;
+    -webkit-appearance: none;
+    cursor: ew-resize;
+    box-shadow: -800px 0 0 800px #525252;
+  }
+
+
+
+  .input-slider-pair {
+    width: 20%;
+    text-align: center;
+    margin-left: 8px;
+  }
+}
