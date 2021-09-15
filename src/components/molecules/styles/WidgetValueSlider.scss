@@ -7,6 +7,7 @@
 
   .default-slider {
     overflow: hidden;
+    margin-left: 6px;
   }
 
   .default-slider::-webkit-slider-thumb {
@@ -16,11 +17,13 @@
     box-shadow: -800px 0 0 800px #525252;
   }
 
-
-
   .input-slider-pair {
     width: 20%;
     text-align: center;
-    margin-left: 8px;
+    margin-left: 6px;
+  }
+
+  :disabled {
+    opacity: 50%;
   }
 }

@@ -90,6 +90,8 @@ export default (): JSX.Element => {
       name="Vertical Alignment"
       min={0}
       max={100}
+      opts={['left', 'center', 'right']}
+      defaultOpt={0}
       defaultValue={10}
       defaultProp="textAlign"
       action={() => {}}

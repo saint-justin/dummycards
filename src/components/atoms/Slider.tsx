@@ -6,6 +6,7 @@ type WInputProps = {
   name: string,
   min: number,
   max: number,
+  disabled?: boolean,
   defaultValue: number,
   action: (n: number) => void,
 };
@@ -13,7 +14,7 @@ type WInputProps = {
 // eslint-disable-next-line max-len
 const WidgetInput = (props: WInputProps): React.ReactElement => {
   const {
-    name, min, max, defaultValue, action,
+    name, min, max, disabled, defaultValue, action,
   } = props;
 
   const changeHandler = (e:React.ChangeEvent<HTMLInputElement>) => {
@@ -34,8 +35,13 @@ const WidgetInput = (props: WInputProps): React.ReactElement => {
       className="default-slider"
       id={name}
       onChange={changeHandler}
+      disabled={disabled}
     />
   );
+};
+
+WidgetInput.defaultProps = {
+  disabled: false,
 };
 
 export default WidgetInput;

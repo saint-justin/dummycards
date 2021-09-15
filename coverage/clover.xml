@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<coverage generated="1631637207668" clover="3.2.0">
-  <project timestamp="1631637207669" name="All files">
+<coverage generated="1631649998821" clover="3.2.0">
+  <project timestamp="1631649998822" name="All files">
     <metrics statements="74" coveredstatements="49" conditionals="68" coveredconditionals="43" methods="10" coveredmethods="10" elements="152" coveredelements="102" complexity="0" loc="74" ncloc="74" packages="1" files="2" classes="2"/>
     <file name="CardDrawer.ts" path="C:\Users\jusvaugh1\Desktop\Local Code\DummyCards\dummycards\src\utils\CardDrawer.ts">
       <metrics statements="61" coveredstatements="36" conditionals="60" coveredconditionals="37" methods="6" coveredmethods="6"/>

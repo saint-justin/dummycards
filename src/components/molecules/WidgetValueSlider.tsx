@@ -4,14 +4,18 @@ import * as _ from 'lodash';
 import Slider from '../atoms/Slider';
 import Label from '../atoms/Label';
 import { DrawableProperty, WInput } from '../../utils/types';
+import { cleanString } from '../../utils/Helpers';
 
 import './styles/WidgetValueSlider.scss';
 import '../atoms/styles/Input.scss';
+import '../atoms/styles/Dropdown.scss';
 
 type WValueSlider = {
   name: string,
   min: number,
   max: number,
+  opts: string[],
+  defaultOpt: number,
   defaultValue: number,
   defaultProp: DrawableProperty;
   action?: ((widgetInput: WInput) => void)
@@ -19,19 +23,25 @@ type WValueSlider = {
 
 const WidgetValueSlider = (props: WValueSlider) => {
   const {
-    name, min, max, defaultValue, defaultProp, action,
+    name, min, max, opts, defaultOpt, defaultValue, defaultProp, action,
   } = props;
-  const [divId] = useState(_.uniqueId(name));
+  const [divId] = useState(_.uniqueId(cleanString(name)));
   const [value, setValue] = useState<number>(defaultValue);
 
+  // eslint-disable-next-line max-len
+  const generateOpts = (arr: string[]) => arr.map((str) => <option value={str} key={_.uniqueId(str)}>{str}</option>);
+  const [optionsElements] = useState<JSX.Element[]>(generateOpts(opts));
+  const [selectValue, setSelectValue] = useState<string>(opts[defaultOpt]);
+
+  // Fxn to fire off our action and update value internally
   const valueChanged = (newValue: string | number): void => {
-    console.log(`Update to value of ${name}: ${newValue}`);
     const num = typeof newValue === 'string' ? parseInt(newValue, 10) : newValue;
     if (!action) throw new Error(`Action not implemented on WidgetValueSlider (${name})`);
     action({ property: defaultProp, value: num.toString() });
     setValue(num);
   };
 
+  // Fxn to handle the generic input fields changing
   const inputChange = (e:React.ChangeEvent<HTMLInputElement>) => {
     if (!action || !e) {
       console.error('Error: No onchange function given for component');
@@ -41,22 +51,39 @@ const WidgetValueSlider = (props: WValueSlider) => {
     valueChanged(target.value || 0);
   };
 
+  // Fxn to handle the select changing
+  const selectChange = (e:React.ChangeEvent<HTMLSelectElement>) => {
+    if (!e) console.error('Error: Select event failed');
+    const target = e.target as HTMLSelectElement;
+    setSelectValue(target.value);
+  };
+
   return (
     <>
       <Label name={name} labelFor={divId} />
       <div id={divId} className="default-valueslider">
+        <select
+          id={_.uniqueId(name)}
+          value={selectValue}
+          onChange={selectChange}
+          className="generic-dropdown"
+        >
+          {optionsElements}
+        </select>
         <Slider
           name={_.uniqueId(name)}
           min={min}
           max={max}
           defaultValue={value}
           action={valueChanged}
+          disabled={selectValue === 'center'}
         />
         <input
           className="input-slider-pair"
           value={value}
           onChange={inputChange}
           type="number"
+          disabled={selectValue === 'center'}
         />
       </div>
     </>
