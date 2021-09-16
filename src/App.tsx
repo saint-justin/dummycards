@@ -70,31 +70,32 @@ export default (): JSX.Element => {
       defaultOption="left"
     />);
 
-    generatedInputTypes.push(<WidgetPositional
-      name="Horizontal Alignment"
-      key="test_dropdown_ha"
-      defaultValue="10"
-      defaultOption="left"
-      positionalType="horizontal"
-    />);
-
     // generatedInputTypes.push(<WidgetPositional
-    //   name="Vertical Alignment"
-    //   key="test_dropdown_va"
+    //   name="Horizontal Alignment"
+    //   key="test_dropdown_ha"
     //   defaultValue="10"
-    //   defaultOption="top"
-    //   positionalType="vertical"
+    //   defaultOption="left"
+    //   positionalType="horizontal"
     // />);
 
     generatedInputTypes.push(<WidgetValueSlider
-      name="Vertical Alignment"
+      name="Horizontal Alignment"
       min={0}
       max={100}
       opts={['left', 'center', 'right']}
       defaultOpt={0}
       defaultValue={10}
-      defaultProp="textAlign"
-      action={() => {}}
+      key="test_dropdown_ha"
+    />);
+
+    generatedInputTypes.push(<WidgetValueSlider
+      name="Vertical Alignment"
+      min={0}
+      max={100}
+      opts={['top', 'center', 'bottom']}
+      defaultOpt={0}
+      defaultValue={10}
+      key="test_slider"
     />);
 
     generatedInputTypes.push(<WidgetColor
