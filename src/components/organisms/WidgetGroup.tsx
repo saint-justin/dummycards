@@ -57,6 +57,10 @@ export default ({ name, widgetInputSet, drawableChanged }: WidgetGroup): JSX.Ele
         if (!Number.isNaN(value)) {
           // TODO: Check if we need to clear the alt value to this one
           posClone[property] = parseInt(value, 10);
+          if (property === 'top') posClone.bottom = 'none';
+          if (property === 'bottom') posClone.top = 'none';
+          if (property === 'left') posClone.right = 'none';
+          if (property === 'right') posClone.left = 'none';
         } else if (value === 'none') {
           posClone[property] = value;
         } else {

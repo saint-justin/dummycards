@@ -43,6 +43,7 @@ const WidgetValueSlider = (props: WValueSlider) => {
     } else if (selectValue !== 'top' && selectValue !== 'bottom' && selectValue !== 'left' && selectValue !== 'right') {
       throw new Error(`Invalid property passed from WidgetValueSlider '${selectValue}' (${name})`);
     } else {
+      // console.log(`Select: ${selectValue}   Value: ${num}`);
       action({ property: selectValue, value: num.toString() });
       setValue(num);
     }

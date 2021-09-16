@@ -8,7 +8,6 @@ import Button from './components/atoms/Button';
 import WidgetInput from './components/molecules/WidgetInput';
 import WidgetColor from './components/molecules/WidgetColor';
 import WidgetDropdown from './components/molecules/WidgetDropdown';
-import WidgetPositional from './components/molecules/WidgetPositional';
 import WidgetValueSlider from './components/molecules/WidgetValueSlider';
 import WidgetGroup from './components/organisms/WidgetGroup';
 import Canvas from './components/atoms/Canvas';
@@ -51,10 +50,11 @@ export default (): JSX.Element => {
     return draws;
   };
 
-  // Creating a second widget to allow users to submit info to be displayed
+  // Create and return a widget to allow users to submit an additional piece of info to be displayed
   const generateNewInputWidget = (key: number, name: string, data?: Drawable): JSX.Element => {
     const generatedInputTypes: JSX.Element[] = [];
 
+    // Input for Text
     generatedInputTypes.push(<WidgetInput
       name="Placeholder Text"
       defaultValue={data?.text || 'coolest clam in the west'}
@@ -62,6 +62,7 @@ export default (): JSX.Element => {
       drawableProp="text"
     />);
 
+    // Dropdown for Text Alignment
     generatedInputTypes.push(<WidgetDropdown
       name="Text Align"
       key="test_dropdownTextAlign"
@@ -70,14 +71,7 @@ export default (): JSX.Element => {
       defaultOption="left"
     />);
 
-    // generatedInputTypes.push(<WidgetPositional
-    //   name="Horizontal Alignment"
-    //   key="test_dropdown_ha"
-    //   defaultValue="10"
-    //   defaultOption="left"
-    //   positionalType="horizontal"
-    // />);
-
+    // Slider for Horizontal Placement w/ Widget for Horz Alignment
     generatedInputTypes.push(<WidgetValueSlider
       name="Horizontal Alignment"
       min={0}
@@ -88,6 +82,7 @@ export default (): JSX.Element => {
       key="test_dropdown_ha"
     />);
 
+    // Slider for Vertical Placement w/ Widget for Vert Alignment
     generatedInputTypes.push(<WidgetValueSlider
       name="Vertical Alignment"
       min={0}
@@ -98,6 +93,7 @@ export default (): JSX.Element => {
       key="test_slider"
     />);
 
+    // Widget for Color
     generatedInputTypes.push(<WidgetColor
       name="Color"
       defaultValue="#00ff00"
