@@ -7,3 +7,9 @@ DummyCards is an open-source quick and dirty mockup tool to help facilitate the 
 3. Export the cards in the style of your choice.
 
 DummyCards is an open-source project. Feel free to use it, to contribute, to signal boost it, or anything like that. Don't claim that you made it, but pretty much anything else is fine. Feel free to make feature requests or bug reports through GitHub issues. We'll get to 'em eventually (probably).
+
+## Live Demo
+
+There's a live version of Dummy Cards currently available at https://dummy-cards.herokuapp.com/
+
+Please note, these are in-progress versions that get released as new updates to the repo get released. Mostly these are for testing purposes. Please reach out to the developer (justin@jvaughn.org) if you'd like a full demo of what this is and what it's going to do!
